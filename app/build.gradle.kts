@@ -1,4 +1,9 @@
-import java.util.Properties
+
+
+dependencies {
+    implementation ("com.google.android.material:material:1.11.0")
+}
+
 
 plugins {
     alias(libs.plugins.android.application)
@@ -18,17 +23,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val properties = Properties()
-        val propertiesFile = project.rootProject.file("local.properties")
-        if (propertiesFile.exists()) {
-            properties.load(propertiesFile.inputStream())
-        }
-
-        // This makes BuildConfig.DOG_KEY available in your Java code
-        buildConfigField("String", "DOG_KEY", "\"${properties.getProperty("DOG_API_KEY")}\"")
-        buildConfigField("String", "CAT_KEY", "\"${properties.getProperty("CAT_API_KEY")}\"")
     }
-
 
 
 
@@ -57,8 +52,6 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
@@ -66,16 +59,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
-
-
-
-    //implementation("com.squareup.picasso:picasso:2.8")
-
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.database)
-
-
-
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
