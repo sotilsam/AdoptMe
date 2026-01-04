@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg">
+
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/include_top_bar_plain"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvHi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hi,"
+        android:textColor="@color/text_yellow"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="64dp"/>
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_yellow"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        tools:text="User Name"
+        app:layout_constraintTop_toBottomOf="@id/tvHi"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="6dp"/>
+
+    <Button
+        android:id="@+id/btnPersonalDetails"
+        style="@style/RoundedGrayButton"
+        android:layout_width="260dp"
+        android:text="Personal details"
+        android:background="@drawable/bg_round_button"
+        app:backgroundTint="@null"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="64dp"/>
+
+    <Button
+        android:id="@+id/btnPreferences"
+        style="@style/RoundedGrayButton"
+        android:layout_width="180dp"
+        android:text="preferences"
+        android:background="@drawable/bg_round_button"
+        app:backgroundTint="@null"
+        app:layout_constraintTop_toBottomOf="@id/btnPersonalDetails"
+        app:layout_constraintStart_toStartOf="@id/btnPersonalDetails"
+        android:layout_marginTop="14dp"/>
+
+    <Button
+        android:id="@+id/btnLogout"
+        style="@style/RoundedGrayButtonLogout"
+        android:layout_width="240dp"
+        android:text="Logout"
+        android:background="@drawable/bg_round_button"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="90dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

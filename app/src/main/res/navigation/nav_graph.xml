@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment"> <fragment
+    android:id="@+id/homeFragment"
+    android:name="com.example.adoptme.HomeFragment"
+    android:label="Home">
+    <action
+        android:id="@+id/action_home_to_login"
+        app:destination="@id/loginFragment" />
+    <action
+        android:id="@+id/action_home_to_register"
+        app:destination="@id/registerFragment" />
+</fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.adoptme.LoginFragment"
+        android:label="Login">
+        <action
+            android:id="@+id/action_login_to_profile"
+            app:destination="@id/profileMenuFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.adoptme.RegisterFragment"
+        android:label="Register">
+        <action
+            android:id="@+id/action_register_to_explor"
+            app:destination="@id/explorFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileMenuFragment"
+        android:name="com.example.adoptme.ProfileMenuFragment"
+        android:label="Profile">
+        <action
+            android:id="@+id/action_profileMenu_to_personalDetails"
+            app:destination="@id/personalDetailsFragment" />
+        <action
+            android:id="@+id/action_profileMenu_to_preferences"
+            app:destination="@id/preferencesFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/explorFragment"
+        android:name="com.example.adoptme.ExplorFragment"
+        android:label="Explore" />
+
+    <fragment
+        android:id="@+id/personalDetailsFragment"
+        android:name="com.example.adoptme.PersonalDetailsFragment"
+        android:label="Personal details" />
+
+    <fragment
+        android:id="@+id/preferencesFragment"
+        android:name="com.example.adoptme.PreferencesFragment"
+        android:label="Preferences" />
+
+    <fragment
+        android:id="@+id/chatListFragment"
+        android:name="com.example.adoptme.ChatListFragment"
+        android:label="Chats" />
+
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.adoptme.FavoritesFragment"
+        android:label="Favorites" />
+
+    <fragment
+        android:id="@+id/matchFragment"
+        android:name="com.example.adoptme.MatchFragment"
+        android:label="Match Screen" />
+
+</navigation>

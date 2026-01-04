@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="top_bar_height">56dp</dimen>
+    <dimen name="bottom_bar_height">74dp</dimen>
+
+    <dimen name="page_padding">24dp</dimen>
+    <dimen name="btn_height">48dp</dimen>
+    <dimen name="btn_radius">14dp</dimen>
+
+    <dimen name="nav_icon_size">28dp</dimen>
+    <dimen name="nav_icon_padding">10dp</dimen>
+</resources>

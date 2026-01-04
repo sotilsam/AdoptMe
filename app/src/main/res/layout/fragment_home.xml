@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_yellow"> <ImageView
+    android:id="@+id/ivLogo"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    app:srcCompat="@drawable/ic_paw"
+    app:layout_constraintBottom_toTopOf="@+id/tvAppName"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tvAppName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AdoptMe"
+        android:textColor="@color/black"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivLogo"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="48dp"/>
+
+    <Button
+        android:id="@+id/btnLogin"
+        style="@style/RoundedGrayButton"
+        android:layout_width="220dp"
+        android:layout_height="@dimen/btn_height"
+        android:text="Login"
+        app:backgroundTint="@null"
+        android:background="@drawable/bg_round_button"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnRegister"
+        style="@style/RoundedGrayButton"
+        android:layout_width="220dp"
+        android:layout_height="@dimen/btn_height"
+        android:text="Register"
+        app:backgroundTint="@null"
+        android:background="@drawable/bg_round_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="100dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
