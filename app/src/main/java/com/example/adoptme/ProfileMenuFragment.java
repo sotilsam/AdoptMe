@@ -18,47 +18,41 @@ public class ProfileMenuFragment extends Fragment {
     private TextView tvName;
 
     public ProfileMenuFragment() {
-        super(R.layout.fragment_profile_menu); // cite: 501
+        super(R.layout.fragment_profile_menu);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         tvName = view.findViewById(R.id.tvName);
 
-        // Fetch real user name from Firestore
+        // Fetch real user name from Firestore to replace "Tomer"
         if (mAuth.getCurrentUser() != null) {
             String uid = mAuth.getCurrentUser().getUid();
             db.collection("users").document(uid).get().addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.exists()) {
-                    String nameFromDb = documentSnapshot.getString("fullName");
-                    if (nameFromDb != null) {
-                        tvName.setText(nameFromDb);
-                    }
+                    String name = documentSnapshot.getString("fullName");
+                    if (name != null) tvName.setText(name);
                 }
             });
         }
 
-        // Navigation logic
+        // Navigation Buttons
         view.findViewById(R.id.btnPersonalDetails).setOnClickListener(v ->
-                NavHostFragment.findNavController(this).navigate(R.id.action_profileMenu_to_personalDetails)
-        ); // cite: 506-508
+                NavHostFragment.findNavController(this).navigate(R.id.action_profileMenu_to_personalDetails));
 
         view.findViewById(R.id.btnPreferences).setOnClickListener(v ->
-                NavHostFragment.findNavController(this).navigate(R.id.action_profileMenu_to_preferences)
-        ); // cite: 509-511
+                NavHostFragment.findNavController(this).navigate(R.id.action_profileMenu_to_preferences));
 
-        // Logout logic
+        // Logout Logic
         view.findViewById(R.id.btnLogout).setOnClickListener(v -> {
             mAuth.signOut();
-            // Return to start screen (homeFragment) after logout
             NavHostFragment.findNavController(this).navigate(R.id.homeFragment);
         });
 
-        BottomNavHelper.wire(view, this); // cite: 516
+        BottomNavHelper.wire(view, this);
     }
 }

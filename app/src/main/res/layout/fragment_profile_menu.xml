@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_bg"> <include
-    android:id="@+id/topBar"
-    layout="@layout/include_top_bar_plain"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"/>
+    android:background="@color/app_bg">
+
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/include_top_bar_plain"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tvHi"
@@ -32,11 +32,11 @@
         android:textColor="@color/text_yellow"
         android:textSize="26sp"
         android:textStyle="bold"
+        tools:text="User Name"
         app:layout_constraintTop_toBottomOf="@id/tvHi"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="6dp"
-        tools:text="User Name" />
+        android:layout_marginTop="6dp"/>
 
     <Button
         android:id="@+id/btnPersonalDetails"
