@@ -2,7 +2,35 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/profileMenuFragment">
+    app:startDestination="@id/homeFragment"> <fragment
+    android:id="@+id/homeFragment"
+    android:name="com.example.adoptme.HomeFragment"
+    android:label="Home">
+    <action
+        android:id="@+id/action_home_to_login"
+        app:destination="@id/loginFragment" />
+    <action
+        android:id="@+id/action_home_to_register"
+        app:destination="@id/registerFragment" />
+</fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.adoptme.LoginFragment"
+        android:label="Login">
+        <action
+            android:id="@+id/action_login_to_profile"
+            app:destination="@id/profileMenuFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.adoptme.RegisterFragment"
+        android:label="Register">
+        <action
+            android:id="@+id/action_register_to_explor"
+            app:destination="@id/explorFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileMenuFragment"
@@ -15,6 +43,11 @@
             android:id="@+id/action_profileMenu_to_preferences"
             app:destination="@id/preferencesFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/explorFragment"
+        android:name="com.example.adoptme.ExplorFragment"
+        android:label="Explore" />
 
     <fragment
         android:id="@+id/personalDetailsFragment"
@@ -36,10 +69,4 @@
         android:name="com.example.adoptme.FavoritesFragment"
         android:label="Favorites" />
 
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.adoptme.HomeFragment"
-        android:label="Home" />
-
 </navigation>
-
