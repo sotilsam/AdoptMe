@@ -30,19 +30,17 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
     public void onBindViewHolder(@NonNull PetViewHolder holder, int position) {
         Pet pet = petList.get(position);
 
-        // 1. שם החיה
+
         holder.tvName.setText(pet.getName());
 
-        // 2. כותרת משנה משופרת: גזע + מין (השינוי החדש!)
-        // זה יציג למשל: "Mixed • Female"
         String subtitle = pet.getBreed() + " • " + pet.getGender();
         holder.tvBreed.setText(subtitle);
 
-        // 3. שורת הפרטים
+
         String info = pet.getAgeCategory() + " • " + pet.getSize() + " • " + pet.getLocation();
         holder.tvInfo.setText(info);
 
-        // 4. טעינת תמונה עם Glide (הוספנו Placeholder)
+
         if (pet.getImageUrl() != null && !pet.getImageUrl().isEmpty()) {
             Glide.with(holder.itemView.getContext())
                     .load(pet.getImageUrl())

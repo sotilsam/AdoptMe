@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg">
+
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/include_top_bar_back_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="size"
+        android:textColor="@color/text_white"
+        android:textSize="28sp"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/page_padding"
+        android:layout_marginTop="64dp"/>
+
+    <TextView
+        android:id="@+id/tvCatDog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="cat/dog"
+        android:textColor="@color/text_white"
+        android:textSize="28sp"
+        app:layout_constraintTop_toBottomOf="@id/tvSize"
+        app:layout_constraintStart_toStartOf="@id/tvSize"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/tvRadius"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="radius location"
+        android:textColor="@color/text_white"
+        android:textSize="28sp"
+        app:layout_constraintTop_toBottomOf="@id/tvCatDog"
+        app:layout_constraintStart_toStartOf="@id/tvSize"
+        android:layout_marginTop="32dp"/>
+
+    <TextView
+        android:id="@+id/tvCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tel Aviv"
+        android:textColor="@color/text_white"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/tvRadius"
+        app:layout_constraintStart_toStartOf="@id/tvRadius"
+        android:layout_marginTop="18dp"/>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/sliderRadius"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:valueFrom="0"
+        android:valueTo="60"
+        android:value="30"
+        app:trackColor="@color/app_yellow"
+        app:thumbColor="@color/slider_blue"
+        app:haloColor="@android:color/transparent"
+        app:layout_constraintStart_toEndOf="@id/tvCity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvCity"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="@dimen/page_padding"/>
+
+
+    <TextView
+        android:id="@+id/tvKm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30km"
+        android:textColor="@color/text_white"
+        android:textSize="14sp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/sliderRadius"
+        app:layout_constraintStart_toStartOf="@id/sliderRadius"
+        app:layout_constraintEnd_toEndOf="@id/sliderRadius"
+        android:layout_marginTop="-6dp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

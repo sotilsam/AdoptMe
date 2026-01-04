@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="app_yellow">#E6D27A</color>
+    <color name="app_bg">#2B2B2B</color>
+    <color name="card_gray">#454545</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_yellow">#E6D27A</color>
+    <color name="logout_red">#FF2B2B</color>
+
+    <color name="slider_blue">#67CDEB</color>
 </resources>

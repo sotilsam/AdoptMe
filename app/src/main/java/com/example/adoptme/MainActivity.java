@@ -1,74 +1,78 @@
 package com.example.adoptme;
 
 import android.os.Bundle;
-import android.widget.Toast;
+import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import com.google.firebase.firestore.FirebaseFirestore;
-import java.util.ArrayList;
-import java.util.List;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private PetsAdapter adapter;
-    private List<Pet> petList;
-    private FirebaseFirestore db;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host_fragment);
+
+        if (navHostFragment != null) {
+            navController = navHostFragment.getNavController();
+        }
+
+
+        ImageButton btnChat = findViewById(R.id.navChat);
+        ImageButton btnFavorites = findViewById(R.id.navFavorites);
+        ImageButton btnHome = findViewById(R.id.navHome);
+        ImageButton btnProfile = findViewById(R.id.navProfile);
+
+
+        btnProfile.setOnClickListener(v -> {
+            navController.navigate(R.id.profileMenuFragment);
         });
 
-        // 1. אתחול ה-RecyclerView
-        recyclerView = findViewById(R.id.rvPets);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        btnFavorites.setOnClickListener(v -> {
+            navController.navigate(R.id.favoritesFragment);
+        });
 
-        petList = new ArrayList<>();
-        adapter = new PetsAdapter(petList);
-        recyclerView.setAdapter(adapter);
+        btnChat.setOnClickListener(v -> {
+            navController.navigate(R.id.chatListFragment);
+        });
 
-        // 2. חיבור ל-Firebase
-        db = FirebaseFirestore.getInstance();
+        btnHome.setOnClickListener(v -> {
+        });
 
-        // 3. הבאת הנתונים
-        fetchPetsFromFirebase();
 
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            updateBottomNavIcons(destination.getId());
+        });
     }
 
-    private void fetchPetsFromFirebase() {
-        // "לך לתיקיית pets ותביא את כל המסמכים"
-        db.collection("pets")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    // ניקוי הרשימה הישנה (אם הייתה)
-                    petList.clear();
+    private void updateBottomNavIcons(int destinationId) {
+        ImageButton btnChat = findViewById(R.id.navChat);
+        ImageButton btnFavorites = findViewById(R.id.navFavorites);
+        ImageButton btnHome = findViewById(R.id.navHome);
+        ImageButton btnProfile = findViewById(R.id.navProfile);
 
-                    // המרה של כל מסמך לאובייקט Pet
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        List<Pet> pets = queryDocumentSnapshots.toObjects(Pet.class);
-                        petList.addAll(pets);
-                        // עדכון המסך
 
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(this, "לא נמצאו חיות במאגר", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "שגיאה בטעינת נתונים: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
+        btnChat.setAlpha(0.5f);
+        btnFavorites.setAlpha(0.5f);
+        btnHome.setAlpha(0.5f);
+        btnProfile.setAlpha(0.5f);
+
+
+        if (destinationId == R.id.chatListFragment) {
+            btnChat.setAlpha(1.0f);
+        } else if (destinationId == R.id.favoritesFragment) {
+            btnFavorites.setAlpha(1.0f);
+        } else if (destinationId == R.id.profileMenuFragment) {
+            btnProfile.setAlpha(1.0f);
+        }
+
     }
 }
-
 
 
