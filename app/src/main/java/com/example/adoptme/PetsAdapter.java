@@ -45,7 +45,7 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
             Glide.with(holder.itemView.getContext())
                     .load(pet.getImageUrl())
                     .centerCrop()
-                    .placeholder(android.R.drawable.ic_menu_gallery) // מציג אייקון אפור עד שהתמונה נטענת
+                    .placeholder(android.R.drawable.ic_menu_gallery)
                     .into(holder.ivImage);
         }
     }
@@ -66,5 +66,7 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
             tvInfo = itemView.findViewById(R.id.tvPetInfo);
             ivImage = itemView.findViewById(R.id.ivPetImage);
         }
+
     }
+
 }

@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment"> <fragment
-    android:id="@+id/homeFragment"
-    android:name="com.example.adoptme.HomeFragment"
-    android:label="Home">
-    <action
-        android:id="@+id/action_home_to_login"
-        app:destination="@id/loginFragment" />
-    <action
-        android:id="@+id/action_home_to_register"
-        app:destination="@id/registerFragment" />
-</fragment>
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.adoptme.HomeFragment"
+        android:label="Home">
+        <action
+            android:id="@+id/action_home_to_login"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_home_to_register"
+            app:destination="@id/registerFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/loginFragment"
@@ -26,10 +29,18 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.adoptme.RegisterFragment"
-        android:label="Register">
+        android:label="Register" />
+
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="com.example.adoptme.ExploreFragment"
+        android:label="Explore">
         <action
-            android:id="@+id/action_register_to_explor"
-            app:destination="@id/explorFragment" />
+            android:id="@+id/action_explore_to_description"
+            app:destination="@id/petDescriptionFragment" />
+        <action
+            android:id="@+id/action_explore_to_matchSuccess"
+            app:destination="@id/matchSuccessScreen" />
     </fragment>
 
     <fragment
@@ -45,28 +56,20 @@
     </fragment>
 
     <fragment
-        android:id="@+id/explorFragment"
-        android:name="com.example.adoptme.ExplorFragment"
-        android:label="Explore" />
-
-    <fragment
-        android:id="@+id/personalDetailsFragment"
-        android:name="com.example.adoptme.PersonalDetailsFragment"
-        android:label="Personal details" />
-
-    <fragment
-        android:id="@+id/preferencesFragment"
-        android:name="com.example.adoptme.PreferencesFragment"
-        android:label="Preferences" />
-
-    <fragment
-        android:id="@+id/chatListFragment"
-        android:name="com.example.adoptme.ChatListFragment"
-        android:label="Chats" />
-
-    <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.adoptme.FavoritesFragment"
-        android:label="Favorites" />
+        android:label="Favorites">
+
+        <action
+            android:id="@+id/action_favorites_to_description"
+            app:destination="@id/petDescriptionFragment" />
+
+    </fragment>
+
+    <fragment android:id="@+id/petDescriptionFragment" android:name="com.example.adoptme.PetDescriptionFragment" />
+    <fragment android:id="@+id/matchSuccessScreen" android:name="com.example.adoptme.MatchSuccessFragment" />
+    <fragment android:id="@+id/personalDetailsFragment" android:name="com.example.adoptme.PersonalDetailsFragment" />
+    <fragment android:id="@+id/preferencesFragment" android:name="com.example.adoptme.PreferencesFragment" />
+    <fragment android:id="@+id/chatListFragment" android:name="com.example.adoptme.ChatListFragment" />
 
 </navigation>

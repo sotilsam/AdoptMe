@@ -26,6 +26,5 @@ public class PersonalDetailsFragment extends Fragment {
         ImageButton back = view.findViewById(R.id.btnBack);
         back.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
 
-        BottomNavHelper.wire(view, this);
     }
 }

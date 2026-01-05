@@ -32,7 +32,7 @@ public class ChatListFragment extends Fragment {
             // TODO: open chat details fragment
         }));
 
-        BottomNavHelper.wire(view, this);
+
     }
 }
 

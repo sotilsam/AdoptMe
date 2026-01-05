@@ -53,6 +53,5 @@ public class ProfileMenuFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.homeFragment);
         });
 
-        BottomNavHelper.wire(view, this);
     }
 }

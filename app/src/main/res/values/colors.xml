@@ -8,6 +8,9 @@
     <color name="text_white">#FFFFFF</color>
     <color name="text_yellow">#E6D27A</color>
     <color name="logout_red">#FF2B2B</color>
+    <color name="gold_header">#EBB74E</color>
+
+
 
     <color name="slider_blue">#67CDEB</color>
 </resources>

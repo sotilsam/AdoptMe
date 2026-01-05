@@ -2,17 +2,16 @@ package com.example.adoptme;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
-import com.google.android.material.slider.Slider;
 
 public class PreferencesFragment extends Fragment {
+
+    private TextView tvRadiusValue;
+    private SeekBar sbRadius;
 
     public PreferencesFragment() {
         super(R.layout.fragment_preferences);
@@ -22,16 +21,28 @@ public class PreferencesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView title = view.findViewById(R.id.tvTitle);
-        title.setText("Preferences");
+        tvRadiusValue = view.findViewById(R.id.tvRadiusValue);
+        sbRadius = view.findViewById(R.id.sbRadius);
 
-        ImageButton back = view.findViewById(R.id.btnBack);
-        back.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
+        // Slider logic for radius
+        sbRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvRadiusValue.setText(progress + "km");
+            }
 
-        Slider slider = view.findViewById(R.id.sliderRadius);
-        TextView km = view.findViewById(R.id.tvKm);
-        slider.addOnChangeListener((s, value, fromUser) -> km.setText(((int) value) + "km"));
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
-        BottomNavHelper.wire(view, this);
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Here you would typically save the preference to Firestore
+            }
+        });
+
+        // Back button
+        view.findViewById(R.id.btnBack).setOnClickListener(v ->
+                requireActivity().getOnBackPressedDispatcher().onBackPressed()
+        );
     }
 }

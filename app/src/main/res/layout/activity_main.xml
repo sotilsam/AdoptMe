@@ -16,18 +16,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavContainer" />
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation" />
 
-    <FrameLayout
-        android:id="@+id/bottomNavContainer"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:background="#2C2F33"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemTextColor="#FFFFFF"
+        app:itemIconTint="#FFFFFF"
+        app:itemBackground="@drawable/bottom_nav_item_bg"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-        <include layout="@layout/include_bottom_nav" />
-
-    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

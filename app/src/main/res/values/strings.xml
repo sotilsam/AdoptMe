@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">AdoptMe</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="match_title">You Found Your\nFurr-fect\nMatch!</string>
 
     <string-array name="role_options">
         <item>I want to adopt</item>

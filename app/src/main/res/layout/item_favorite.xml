@@ -1,35 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="170dp"
-    android:background="@drawable/bg_round_button"
-    android:padding="12dp"
-    android:layout_margin="6dp">
+    android:layout_margin="10dp"
+    app:cardCornerRadius="22dp"
+    app:cardElevation="0dp"
+    app:cardUseCompatPadding="false">
 
-    <!-- Placeholder for image (replace later with ImageView) -->
-    <View
-        android:id="@+id/img"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#333333"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tvName"
-        android:layout_marginBottom="10dp"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dog name"
-        android:textColor="@color/text_white"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <ImageView
+            android:id="@+id/ivFavPet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/pet_image"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/ivHeartOverlay"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="12dp"
+            android:src="@drawable/favorite"
+            app:tint="@android:color/white"/>
 
+    </FrameLayout>
+
+</androidx.cardview.widget.CardView>

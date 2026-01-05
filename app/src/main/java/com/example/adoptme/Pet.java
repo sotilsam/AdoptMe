@@ -1,22 +1,22 @@
 package com.example.adoptme;
 
-import com.google.firebase.firestore.PropertyName;
+import com.google.firebase.firestore.Exclude;
 
 public class Pet {
     private String name;
-    private String type; // Dog/Cat
+    private String type;
     private String breed;
-    private String ageCategory; // Puppy, Adult, Senior
-    private String gender;      // Male, Female (חדש!)
+    private String ageCategory;
+    private String gender;
     private String size;
     private String description;
     private String location;
     private String imageUrl;
 
+    private String id;
 
     public Pet() {}
 
-    // Getters
     public String getName() { return name; }
     public String getType() { return type; }
     public String getBreed() { return breed; }
@@ -27,6 +27,8 @@ public class Pet {
     public String getLocation() { return location; }
     public String getImageUrl() { return imageUrl; }
 
+    @Exclude
+    public String getId() { return id; }
 
     public void setName(String name) { this.name = name; }
     public void setType(String type) { this.type = type; }
@@ -37,4 +39,6 @@ public class Pet {
     public void setDescription(String description) { this.description = description; }
     public void setLocation(String location) { this.location = location; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public void setId(String id) { this.id = id; }
 }

@@ -34,11 +34,11 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize Firebase [cite: 69, 71]
+
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Link UI elements from your Figma design
+
         etFullName = view.findViewById(R.id.etFullName);
         etEmail = view.findViewById(R.id.etEmail);
         etPhone = view.findViewById(R.id.etPhone);
@@ -54,28 +54,27 @@ public class RegisterFragment extends Fragment {
         String password = etPassword.getText().toString().trim();
         String name = etFullName.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
-        String role = spinnerRole.getSelectedItem().toString(); // "Adopter" or "Shelter"
+        String role = spinnerRole.getSelectedItem().toString();
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Create user in Firebase Auth [cite: 70]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
                     String uid = authResult.getUser().getUid();
 
-                    // Save additional info to Firestore [cite: 71]
+
                     Map<String, Object> user = new HashMap<>();
                     user.put("fullName", name);
                     user.put("phone", phone);
                     user.put("role", role);
-                    user.put("isVerified", false); // Default for new users
+                    user.put("isVerified", false);
 
                     db.collection("users").document(uid).set(user)
                             .addOnSuccessListener(aVoid -> {
-                                // Registration success, go to Profile or Home [cite: 1076, 1105]
+
                                 NavHostFragment.findNavController(this)
                                         .navigate(R.id.homeFragment);
                             });

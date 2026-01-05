@@ -1,78 +1,47 @@
 package com.example.adoptme;
 
 import android.os.Bundle;
-import android.widget.ImageButton;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private NavController navController;
+    private BottomNavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
 
-        if (navHostFragment != null) {
-            navController = navHostFragment.getNavController();
-        }
+        if (navHostFragment == null) return;
 
+        NavController navController = navHostFragment.getNavController();
 
-        ImageButton btnChat = findViewById(R.id.navChat);
-        ImageButton btnFavorites = findViewById(R.id.navFavorites);
-        ImageButton btnHome = findViewById(R.id.navHome);
-        ImageButton btnProfile = findViewById(R.id.navProfile);
+        navView = findViewById(R.id.bottom_navigation);
+        navView.setItemIconTintList(null);
 
+        NavigationUI.setupWithNavController(navView, navController);
 
-        btnProfile.setOnClickListener(v -> {
-            navController.navigate(R.id.profileMenuFragment);
-        });
-
-        btnFavorites.setOnClickListener(v -> {
-            navController.navigate(R.id.favoritesFragment);
-        });
-
-        btnChat.setOnClickListener(v -> {
-            navController.navigate(R.id.chatListFragment);
-        });
-
-        btnHome.setOnClickListener(v -> {
-        });
-
-
+        // Hide BottomNav on auth screens
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            updateBottomNavIcons(destination.getId());
+            int id = destination.getId();
+
+            boolean hide =
+                    id == R.id.homeFragment ||
+                            id == R.id.loginFragment ||
+                            id == R.id.registerFragment ||
+                            id == R.id.matchSuccessScreen; // optional, לפי הפיגמה שלך זה מסך בלי bottom bar
+
+            navView.setVisibility(hide ? View.GONE : View.VISIBLE);
         });
-    }
-
-    private void updateBottomNavIcons(int destinationId) {
-        ImageButton btnChat = findViewById(R.id.navChat);
-        ImageButton btnFavorites = findViewById(R.id.navFavorites);
-        ImageButton btnHome = findViewById(R.id.navHome);
-        ImageButton btnProfile = findViewById(R.id.navProfile);
-
-
-        btnChat.setAlpha(0.5f);
-        btnFavorites.setAlpha(0.5f);
-        btnHome.setAlpha(0.5f);
-        btnProfile.setAlpha(0.5f);
-
-
-        if (destinationId == R.id.chatListFragment) {
-            btnChat.setAlpha(1.0f);
-        } else if (destinationId == R.id.favoritesFragment) {
-            btnFavorites.setAlpha(1.0f);
-        } else if (destinationId == R.id.profileMenuFragment) {
-            btnProfile.setAlpha(1.0f);
-        }
-
     }
 }
-
-

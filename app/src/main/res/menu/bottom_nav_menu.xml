@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/chatListFragment"
+        android:icon="@drawable/mail"
+        android:title="Chat" />
+
+    <item
+        android:id="@+id/favoritesFragment"
+        android:icon="@drawable/favorite"
+        android:title="Favorites" />
+
+    <item
+        android:id="@+id/exploreFragment"
+        android:icon="@drawable/ic_paw"
+        android:title="Explore" />
+
+    <item
+        android:id="@+id/profileMenuFragment"
+        android:icon="@drawable/profile"
+        android:title="Profile" />
+
+</menu>

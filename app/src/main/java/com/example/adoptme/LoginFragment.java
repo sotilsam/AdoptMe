@@ -49,12 +49,16 @@ public class LoginFragment extends Fragment {
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
-                    // Login success -> Go to Profile
                     NavHostFragment.findNavController(this)
-                            .navigate(R.id.action_login_to_profile);
+                            .navigate(R.id.exploreFragment);
+
+                    NavHostFragment.findNavController(this)
+                            .popBackStack(R.id.loginFragment, true);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Login failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
+
+
     }
 }
