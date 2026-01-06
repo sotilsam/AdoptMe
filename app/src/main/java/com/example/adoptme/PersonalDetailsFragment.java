@@ -20,11 +20,14 @@ public class PersonalDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView title = view.findViewById(R.id.tvTitle);
-        title.setText("Personal details");
+        View topBar = view.findViewById(R.id.topBar);
 
-        ImageButton back = view.findViewById(R.id.btnBack);
+        TextView title = topBar.findViewById(R.id.tvTitle);
+        title.setText(R.string.personal_details_title);
+
+
+        ImageButton back = topBar.findViewById(R.id.btnBack);
         back.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
-
     }
+
 }

@@ -18,6 +18,13 @@
         <item name="android:paddingRight">18dp</item>
     </style>
 
+    <style name="BottomNavActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <!-- THIS is the pill color -->
+        <item name="android:color">#3A3F45</item>
+    </style>
+
+
+
     <style name="CircleImage" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>

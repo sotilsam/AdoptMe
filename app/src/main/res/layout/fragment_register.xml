@@ -13,24 +13,13 @@
         android:layout_height="wrap_content"
         android:text="Register"
         android:textColor="@color/text_yellow"
-        android:textSize="28sp"
+        android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="40dp"/>
 
-    <Spinner
-        android:id="@+id/spinnerRole"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/btn_height"
-        android:background="@drawable/bg_round_button"
-        android:paddingStart="10dp"
-        android:entries="@array/role_options"
-        app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp"/>
 
     <EditText
         android:id="@+id/etFullName"
@@ -41,10 +30,10 @@
         android:textColor="@color/white"
         android:background="@drawable/bg_round_button"
         android:paddingStart="15dp"
-        app:layout_constraintTop_toBottomOf="@id/spinnerRole"
+        app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="50dp"/>
 
     <EditText
         android:id="@+id/etEmail"
@@ -109,7 +98,8 @@
     <Button
         android:id="@+id/btnRegisterAction"
         style="@style/RoundedGrayButton"
-        android:layout_width="200dp"
+        app:backgroundTint="@null"
+        android:layout_width="0dp"
         android:text="Register"
         android:layout_marginTop="40dp"
         app:layout_constraintTop_toBottomOf="@id/etConfirmPassword"

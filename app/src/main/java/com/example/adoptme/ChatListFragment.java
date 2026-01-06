@@ -22,17 +22,15 @@ public class ChatListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         RecyclerView rv = view.findViewById(R.id.rvChats);
+        if (rv == null) return;
+
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        ArrayList<ChatItem> demo = new ArrayList<>();
-        demo.add(new ChatItem("Pie", "Hello Tomer 👋", "12:30"));
-        demo.add(new ChatItem("Yuki", "I’m interested in adopting...", "11:05"));
-
-        rv.setAdapter(new ChatAdapter(demo, item -> {
-            // TODO: open chat details fragment
-        }));
-
-
     }
+
+
+
+
+
 }
 

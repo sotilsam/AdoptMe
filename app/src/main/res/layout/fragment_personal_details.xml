@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg">
@@ -9,65 +10,158 @@
     <include
         android:id="@+id/topBar"
         layout="@layout/include_top_bar_back_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-        android:id="@+id/tvNameLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="name"
+    <!-- Full name -->
+    <EditText
+        android:id="@+id/etFullName"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/bg_input_rounded"
+        android:hint="Full name"
+        android:inputType="textPersonName"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:textColor="@color/text_white"
-        android:textSize="28sp"
+        android:textColorHint="#B0B0B0"
+        android:textSize="26sp"
+        android:maxWidth="360dp"
+        tools:ignore="TooWide"
         app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="@dimen/page_padding"
-        android:layout_marginTop="80dp"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-        android:id="@+id/tvEmailLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="email"
+    <!-- Email -->
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/bg_input_rounded"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:textColor="@color/text_white"
-        android:textSize="28sp"
-        app:layout_constraintTop_toBottomOf="@id/tvNameLabel"
-        app:layout_constraintStart_toStartOf="@id/tvNameLabel"
-        android:layout_marginTop="16dp"/>
+        android:textColorHint="#B0B0B0"
+        android:textSize="26sp"
+        android:maxWidth="360dp"
+        tools:ignore="TooWide"
+        app:layout_constraintTop_toBottomOf="@id/etFullName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-        android:id="@+id/tvPhoneLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="phone"
+    <!-- Phone -->
+    <EditText
+        android:id="@+id/etPhone"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/bg_input_rounded"
+        android:hint="Phone"
+        android:inputType="phone"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:textColor="@color/text_white"
-        android:textSize="28sp"
-        app:layout_constraintTop_toBottomOf="@id/tvEmailLabel"
-        app:layout_constraintStart_toStartOf="@id/tvNameLabel"
-        android:layout_marginTop="16dp"/>
+        android:textColorHint="#B0B0B0"
+        android:textSize="26sp"
+        android:maxWidth="360dp"
+        tools:ignore="TooWide"
+        app:layout_constraintTop_toBottomOf="@id/etEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-        android:id="@+id/tvHouseKids"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="house with kids"
-        android:textColor="@color/text_white"
-        android:textSize="28sp"
-        app:layout_constraintTop_toBottomOf="@id/tvPhoneLabel"
-        app:layout_constraintStart_toStartOf="@id/tvNameLabel"
-        android:layout_marginTop="40dp"/>
+    <!-- Row: house with kids -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rowKidsYes"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/bg_row_rounded"
+        android:paddingStart="20dp"
+        android:paddingEnd="14dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toBottomOf="@id/etPhone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <TextView
-        android:id="@+id/tvHouseNoKids"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="house without kids"
-        android:textColor="@color/text_white"
-        android:textSize="28sp"
-        app:layout_constraintTop_toBottomOf="@id/tvHouseKids"
-        app:layout_constraintStart_toStartOf="@id/tvNameLabel"
-        android:layout_marginTop="16dp"/>
+        <TextView
+            android:id="@+id/tvKidsYes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/house_with_kids"
+            android:textColor="@color/text_white"
+            android:textSize="20sp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/cbKidsYes"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
+        <CheckBox
+            android:id="@+id/cbKidsYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/checkbox_tint"
+            tools:ignore="TouchTargetSizeCheck"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Row: house without kids -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rowKidsNo"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/bg_row_rounded"
+        android:paddingStart="20dp"
+        android:paddingEnd="14dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toBottomOf="@id/rowKidsYes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tvKidsNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="House without kids"
+            android:textColor="@color/text_white"
+            android:textSize="20sp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/cbKidsNo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <CheckBox
+            android:id="@+id/cbKidsNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/checkbox_tint"
+            tools:ignore="TouchTargetSizeCheck"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

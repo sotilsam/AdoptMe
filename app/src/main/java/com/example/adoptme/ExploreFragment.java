@@ -152,7 +152,7 @@ public class ExploreFragment extends Fragment {
 
     private void showMessageDialog(Pet pet) {
         Dialog dialog = new Dialog(requireContext());
-        dialog.setContentView(R.layout.layout_confirm_dialog);
+        dialog.setContentView(R.layout.dialog_message_shelter);
 
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);

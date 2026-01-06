@@ -54,8 +54,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
         VH(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvSubtitle = itemView.findViewById(R.id.tvSubtitle);
-            tvTime = itemView.findViewById(R.id.tvTime);
         }
     }
 }

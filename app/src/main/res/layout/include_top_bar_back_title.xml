@@ -2,18 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/headerBar"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/top_bar_height"
+    android:layout_height="56dp"
     android:background="@color/app_yellow">
 
     <ImageButton
         android:id="@+id/btnBack"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:background="@android:color/transparent"
         android:contentDescription="Back"
-        android:src="@android:drawable/ic_media_previous"
-        android:padding="10dp"
+        android:padding="14dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/left"
+        app:tint="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -23,9 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Title"
-        android:textColor="@android:color/black"
-        android:textSize="24sp"
+        android:textColor="@color/black"
         android:textStyle="bold"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="I would like to\nmessage the shelter"
+            android:text="Would you like to\n contact the shelter?"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"

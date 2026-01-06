@@ -43,7 +43,6 @@ public class RegisterFragment extends Fragment {
         etEmail = view.findViewById(R.id.etEmail);
         etPhone = view.findViewById(R.id.etPhone);
         etPassword = view.findViewById(R.id.etPassword);
-        spinnerRole = view.findViewById(R.id.spinnerRole); // Adopter or Shelter
         btnRegister = view.findViewById(R.id.btnRegisterAction);
 
         btnRegister.setOnClickListener(v -> handleRegistration());

@@ -34,7 +34,6 @@ public class PetDescriptionFragment extends Fragment {
 
         // Bind views
         btnBack = view.findViewById(R.id.btnBack);
-        tvTitleName = view.findViewById(R.id.tvTitleName);
         ivDetailImage = view.findViewById(R.id.ivDetailImage);
         tvDescriptionBody = view.findViewById(R.id.tvDescriptionBody);
         tvHostedByValue = view.findViewById(R.id.tvHostedByValue);

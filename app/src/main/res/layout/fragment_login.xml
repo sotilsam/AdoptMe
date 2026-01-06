@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Login"
         android:textColor="@color/text_yellow"
-        android:textSize="28sp"
+        android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,7 @@
 
     <EditText
         android:id="@+id/etUsername"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="@dimen/btn_height"
         android:hint="Username"
         android:textColorHint="#888888"
@@ -32,11 +32,11 @@
         app:layout_constraintTop_toBottomOf="@id/tvLoginTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginTop="70dp"/>
 
     <EditText
         android:id="@+id/etPassword"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="@dimen/btn_height"
         android:hint="Password"
         android:inputType="textPassword"
@@ -52,11 +52,14 @@
     <Button
         android:id="@+id/btnLoginAction"
         style="@style/RoundedGrayButton"
-        android:layout_width="160dp"
+        app:backgroundTint="@null"
+        android:layout_width="295dp"
         android:text="Login"
         app:layout_constraintTop_toBottomOf="@id/etPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="100dp"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,5 +29,4 @@
         app:itemBackground="@drawable/bottom_nav_item_bg"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

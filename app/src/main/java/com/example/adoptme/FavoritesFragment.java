@@ -1,5 +1,6 @@
 package com.example.adoptme;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -31,7 +32,19 @@ public class FavoritesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         rvFavorites = view.findViewById(R.id.rvFavorites);
-        rvFavorites.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+
+        // 2 items per row
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 2);
+        rvFavorites.setLayoutManager(gridLayoutManager);
+
+        // Improves performance when layout size doesn’t change
+        rvFavorites.setHasFixedSize(true);
+
+        // Add spacing between items (only add once)
+        if (rvFavorites.getItemDecorationCount() == 0) {
+            int spacingPx = dpToPx(24);
+            rvFavorites.addItemDecoration(new GridSpacingItemDecoration(2, spacingPx));
+        }
 
         adapter = new FavoritesAdapter(favoritePets);
         rvFavorites.setAdapter(adapter);
@@ -52,6 +65,7 @@ public class FavoritesFragment extends Fragment {
                 .get()
                 .addOnSuccessListener(query -> {
                     favoritePets.clear();
+
                     for (var doc : query.getDocuments()) {
                         Pet pet = doc.toObject(Pet.class);
                         if (pet != null) {
@@ -59,10 +73,46 @@ public class FavoritesFragment extends Fragment {
                             favoritePets.add(pet);
                         }
                     }
+
                     adapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(getContext(), "Failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
                 );
+    }
+
+    // --- Helpers ---
+
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
+    }
+
+    private static class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+        private final int spanCount;
+        private final int spacing;
+
+        GridSpacingItemDecoration(int spanCount, int spacing) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+        }
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
+                                   @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view);
+            if (position == RecyclerView.NO_POSITION) return;
+
+            int column = position % spanCount;
+
+            outRect.left = spacing - column * spacing / spanCount;
+            outRect.right = (column + 1) * spacing / spanCount;
+            outRect.bottom = spacing;
+
+            // Top spacing only for first row
+            if (position < spanCount) {
+                outRect.top = spacing;
+            }
+        }
     }
 }

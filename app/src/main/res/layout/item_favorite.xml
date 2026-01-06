@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
-    android:layout_margin="10dp"
+    android:layout_height="140dp"
     app:cardCornerRadius="22dp"
     app:cardElevation="0dp"
     app:cardUseCompatPadding="false">
@@ -17,8 +17,10 @@
             android:id="@+id/ivFavPet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/pet_image"/>
+            android:contentDescription="@string/pet_image"
+            android:layout_margin="10dp"
+
+            android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/ivHeartOverlay"
@@ -27,7 +29,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="12dp"
             android:src="@drawable/favorite"
-            app:tint="@android:color/white"/>
+            app:tint="@android:color/white" />
 
     </FrameLayout>
 

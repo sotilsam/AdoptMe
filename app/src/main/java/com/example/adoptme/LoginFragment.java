@@ -42,6 +42,14 @@ public class LoginFragment extends Fragment {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
+        // DEV BYPASS: use a temporary password to enter the app without Firebase login
+        // IMPORTANT: remove this before you submit or push to main branch
+        if ("dev".equals(email) && "1234".equals(password)) {
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_login_to_explore); // or action_login_to_profile, whatever you want as entry
+            return;
+        }
+
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(getContext(), "Please enter email and password", Toast.LENGTH_SHORT).show();
             return;
@@ -50,15 +58,11 @@ public class LoginFragment extends Fragment {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
                     NavHostFragment.findNavController(this)
-                            .navigate(R.id.exploreFragment);
-
-                    NavHostFragment.findNavController(this)
-                            .popBackStack(R.id.loginFragment, true);
+                            .navigate(R.id.action_login_to_explore); // go straight to Explore after real login too
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Login failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
-
-
+                .addOnFailureListener(e ->
+                        Toast.makeText(getContext(), "Login failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                );
     }
+
 }

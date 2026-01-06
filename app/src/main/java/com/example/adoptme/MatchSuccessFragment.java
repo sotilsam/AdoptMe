@@ -17,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MatchSuccessFragment extends Fragment {
 
-    private ImageView ivMatchedPetCircle, ivSmallPetThumb;
+    private ImageView ivMatchedPetCircle;
     private TextView tvMatchMessage;
     private String currentUserName = "User";
 
@@ -31,7 +31,6 @@ public class MatchSuccessFragment extends Fragment {
 
         // Initialize UI components from your layout_match_success.xml
         ivMatchedPetCircle = view.findViewById(R.id.ivMatchedPetCircle);
-        ivSmallPetThumb = view.findViewById(R.id.ivSmallPetThumb);
         tvMatchMessage = view.findViewById(R.id.tvMatchMessage);
         Button btnMessageShelter = view.findViewById(R.id.btnMessageShelter);
 
@@ -49,7 +48,6 @@ public class MatchSuccessFragment extends Fragment {
             // Load pet images into circular views using Glide
             if (petImage != null) {
                 Glide.with(this).load(petImage).circleCrop().into(ivMatchedPetCircle);
-                Glide.with(this).load(petImage).circleCrop().into(ivSmallPetThumb);
             }
         }
 

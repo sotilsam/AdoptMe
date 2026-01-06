@@ -8,42 +8,32 @@
     android:layout_height="match_parent"
     android:background="@color/app_bg">
 
-    <!-- Yellow header -->
-    <View
-        android:id="@+id/headerBar"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:background="@color/app_yellow"
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/include_top_bar_back_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-        android:id="@+id/tvFavoritesTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Favorites"
-        android:textStyle="bold"
-        android:textSize="34sp"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toTopOf="@id/headerBar"
-        app:layout_constraintBottom_toBottomOf="@id/headerBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+    <!-- לא הצלחתי להרחיק אותם אחד מהשניייי -->
     <!-- Grid -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFavorites"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingStart="18dp"
-        android:paddingEnd="18dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:paddingTop="18dp"
         android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@id/headerBar"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_favorite"/>
+
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        tools:itemCount="6"
+        tools:listitem="@layout/item_favorite" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

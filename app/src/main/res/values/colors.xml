@@ -3,12 +3,15 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="app_yellow">#E6D27A</color>
-    <color name="app_bg">#2B2B2B</color>
+    <color name="app_bg">#2C2F33</color>
     <color name="card_gray">#454545</color>
     <color name="text_white">#FFFFFF</color>
     <color name="text_yellow">#E6D27A</color>
-    <color name="logout_red">#FF2B2B</color>
+    <color name="logout_red">#bd0202</color>
     <color name="gold_header">#EBB74E</color>
+    <color name="purple_dark">#3E2F5B</color>
+    <color name="input_bg">#3F3F3F</color>
+
 
 
 

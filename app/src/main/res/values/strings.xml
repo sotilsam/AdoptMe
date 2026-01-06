@@ -3,6 +3,22 @@
     <string name="app_name">AdoptMe</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="match_title">You Found Your\nFurr-fect\nMatch!</string>
+    <string name="pet_image">Pet image</string>
+    <string name="looking_for">I am looking to adopt a...</string>
+    <string name="Search_Radius">Search Radius</string>
+    <string name="km">50km</string>
+    <string name="dog">Dog</string>
+    <string name="cat">Cat</string>
+    <string name="personal_details_title">Personal details</string>
+    <string name="full_name">Full name</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="house_with_kids">House with kids</string>
+    <string name="house_without_kids">House without kids</string>
+
+
+
+
 
     <string-array name="role_options">
         <item>I want to adopt</item>

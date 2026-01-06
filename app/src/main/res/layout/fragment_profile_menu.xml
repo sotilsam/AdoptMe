@@ -53,18 +53,18 @@
     <Button
         android:id="@+id/btnPreferences"
         style="@style/RoundedGrayButton"
-        android:layout_width="180dp"
-        android:text="preferences"
+        android:layout_width="260dp"
+        android:text="Preferences"
         android:background="@drawable/bg_round_button"
         app:backgroundTint="@null"
         app:layout_constraintTop_toBottomOf="@id/btnPersonalDetails"
         app:layout_constraintStart_toStartOf="@id/btnPersonalDetails"
-        android:layout_marginTop="14dp"/>
+        android:layout_marginTop="20dp"/>
 
     <Button
         android:id="@+id/btnLogout"
         style="@style/RoundedGrayButtonLogout"
-        android:layout_width="240dp"
+        android:layout_width="200dp"
         android:text="Logout"
         android:background="@drawable/bg_round_button"
         app:backgroundTint="@null"
