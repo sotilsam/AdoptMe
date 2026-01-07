@@ -99,6 +99,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         TextView tvDescription = dialog.findViewById(R.id.tvFavDetailDescription);
         Button btnEmail = dialog.findViewById(R.id.btnFavDetailEmail);
         Button btnPhone = dialog.findViewById(R.id.btnFavDetailPhone);
+        Button btnUnfavorite = dialog.findViewById(R.id.btnFavDetailUnfavorite);
         Button btnClose = dialog.findViewById(R.id.btnFavDetailClose);
 
         Glide.with(view.getContext())
@@ -147,6 +148,37 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         } else {
             btnPhone.setVisibility(View.GONE);
         }
+
+        // Unfavorite button
+        btnUnfavorite.setOnClickListener(v -> {
+            String userId = FirebaseAuth.getInstance().getUid();
+            if (userId == null) return;
+
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(userId)
+                    .update("favorites", FieldValue.arrayRemove(pet.getId()))
+                    .addOnSuccessListener(aVoid -> {
+                        android.widget.Toast.makeText(view.getContext(),
+                            "Removed from favorites",
+                            android.widget.Toast.LENGTH_SHORT).show();
+
+                        // Remove from list and update UI
+                        int position = favoritePets.indexOf(pet);
+                        if (position != -1) {
+                            favoritePets.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, favoritePets.size());
+                        }
+
+                        dialog.dismiss();
+                    })
+                    .addOnFailureListener(e -> {
+                        android.widget.Toast.makeText(view.getContext(),
+                            "Failed to remove: " + e.getMessage(),
+                            android.widget.Toast.LENGTH_SHORT).show();
+                    });
+        });
 
         btnClose.setOnClickListener(v -> dialog.dismiss());
 

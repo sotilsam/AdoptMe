@@ -1,6 +1,9 @@
 package com.example.adoptme;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -14,19 +17,25 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class ExploreFragment extends Fragment {
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
 
     private ImageView ivPetImage;
     private TextView tvPetName, tvPetBreed, tvPetInfo;
@@ -41,8 +50,11 @@ public class ExploreFragment extends Fragment {
     private List<String> userFavoritePets = new ArrayList<>();
     private List<String> preferredTypes = new ArrayList<>();
     private List<String> preferredSizes = new ArrayList<>();
+    private int locationRadius = 30; // Default radius in km
 
     private GestureDetector gestureDetector;
+    private FusedLocationProviderClient fusedLocationClient;
+    private Location userLocation;
 
     public ExploreFragment() {
         super(R.layout.fragment_explore);
@@ -51,6 +63,9 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Initialize location client
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
         // Card UI (inside include)
         cardContainer = view.findViewById(R.id.exploreCardContainer);
@@ -83,7 +98,8 @@ public class ExploreFragment extends Fragment {
         // Setup swipe gestures
         setupSwipeGestures();
 
-        loadUserPreferencesAndFetchPets();
+        // Request location permission and load pets
+        requestLocationPermissionAndLoad();
     }
 
     private void setupSwipeGestures() {
@@ -146,6 +162,10 @@ public class ExploreFragment extends Fragment {
                         if (preferences != null) {
                             preferredTypes = (List<String>) preferences.get("type");
                             preferredSizes = (List<String>) preferences.get("size");
+                            Object radiusObj = preferences.get("locationRadius");
+                            if (radiusObj instanceof Long) {
+                                locationRadius = ((Long) radiusObj).intValue();
+                            }
                         }
                         if (preferredTypes == null) preferredTypes = new ArrayList<>();
                         if (preferredSizes == null) preferredSizes = new ArrayList<>();
@@ -156,6 +176,62 @@ public class ExploreFragment extends Fragment {
                     Toast.makeText(getContext(), "Failed to load user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     fetchPetsFromFirebase();
                 });
+    }
+
+    private void requestLocationPermissionAndLoad() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            getUserLocationAndLoad();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getUserLocationAndLoad();
+            } else {
+                // Permission denied, load pets without location filtering
+                Toast.makeText(getContext(), "Location permission denied. Showing all pets.", Toast.LENGTH_SHORT).show();
+                loadUserPreferencesAndFetchPets();
+            }
+        }
+    }
+
+    private void getUserLocationAndLoad() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            loadUserPreferencesAndFetchPets();
+            return;
+        }
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(location -> {
+                    userLocation = location;
+                    loadUserPreferencesAndFetchPets();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Failed to get location", Toast.LENGTH_SHORT).show();
+                    loadUserPreferencesAndFetchPets();
+                });
+    }
+
+    private double calculateDistance(GeoPoint petLocation) {
+        if (userLocation == null || petLocation == null) {
+            return 0;
+        }
+
+        float[] results = new float[1];
+        Location.distanceBetween(
+            userLocation.getLatitude(), userLocation.getLongitude(),
+            petLocation.getLatitude(), petLocation.getLongitude(),
+            results
+        );
+
+        return results[0] / 1000; // Convert meters to kilometers
     }
 
     private void fetchPetsFromFirebase() {
@@ -182,6 +258,14 @@ public class ExploreFragment extends Fragment {
                             // Filter by size preference
                             if (!preferredSizes.isEmpty() && pet.getSize() != null && !preferredSizes.contains(pet.getSize())) {
                                 continue;
+                            }
+
+                            // Filter by location radius (only if user location is available)
+                            if (userLocation != null && pet.getLocation() != null) {
+                                double distance = calculateDistance(pet.getLocation());
+                                if (distance > locationRadius) {
+                                    continue;
+                                }
                             }
 
                             petList.add(pet);

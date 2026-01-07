@@ -132,6 +132,15 @@
                 style="@style/RoundedGrayButton" />
 
             <Button
+                android:id="@+id/btnFavDetailUnfavorite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remove from Favorites"
+                android:textColor="@color/logout_red"
+                android:layout_marginTop="16dp"
+                style="@style/RoundedGrayButton" />
+
+            <Button
                 android:id="@+id/btnFavDetailClose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
