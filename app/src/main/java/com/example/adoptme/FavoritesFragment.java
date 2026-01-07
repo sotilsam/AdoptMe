@@ -59,25 +59,42 @@ public class FavoritesFragment extends Fragment {
             return;
         }
 
+        // First, get the user's favorites array
         FirebaseFirestore.getInstance()
-                .collection("users").document(userId)
-                .collection("favorites")
+                .collection("users")
+                .document(userId)
                 .get()
-                .addOnSuccessListener(query -> {
-                    favoritePets.clear();
+                .addOnSuccessListener(userDoc -> {
+                    if (!userDoc.exists()) return;
 
-                    for (var doc : query.getDocuments()) {
-                        Pet pet = doc.toObject(Pet.class);
-                        if (pet != null) {
-                            pet.setId(doc.getId());
-                            favoritePets.add(pet);
-                        }
+                    List<String> favoriteIds = (List<String>) userDoc.get("favorites");
+                    if (favoriteIds == null || favoriteIds.isEmpty()) {
+                        favoritePets.clear();
+                        adapter.notifyDataSetChanged();
+                        return;
                     }
 
-                    adapter.notifyDataSetChanged();
+                    // Now fetch each pet by ID
+                    favoritePets.clear();
+                    for (String petId : favoriteIds) {
+                        FirebaseFirestore.getInstance()
+                                .collection("pets")
+                                .document(petId)
+                                .get()
+                                .addOnSuccessListener(petDoc -> {
+                                    if (petDoc.exists()) {
+                                        Pet pet = petDoc.toObject(Pet.class);
+                                        if (pet != null) {
+                                            pet.setId(petDoc.getId());
+                                            favoritePets.add(pet);
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                });
+                    }
                 })
                 .addOnFailureListener(e ->
-                        Toast.makeText(getContext(), "Failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(getContext(), "Failed to load favorites: " + e.getMessage(), Toast.LENGTH_LONG).show()
                 );
     }
 

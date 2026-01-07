@@ -27,37 +27,80 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/looking_for"
+            android:text="Pet Type"
             android:textSize="20sp"
             android:textColor="@color/text_yellow"
-            android:layout_marginBottom="1dp" />
+            android:layout_marginBottom="8dp" />
 
-        <RadioGroup
-            android:id="@+id/rgPetType"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="32dp">
 
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/rbDog"
+            <CheckBox
+                android:id="@+id/cbDog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/dog"
-                android:textSize="20sp"
+                android:text="Dog"
+                android:textSize="18sp"
                 android:textColor="@color/text_white"
-                app:buttonTint="@color/radio_tint" />
+                android:buttonTint="@color/text_yellow" />
 
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/rbCat"
+            <CheckBox
+                android:id="@+id/cbCat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cat"
-                android:textSize="20sp"
+                android:text="Cat"
+                android:textSize="18sp"
                 android:textColor="@color/text_white"
                 android:layout_marginStart="20dp"
-                app:buttonTint="@color/radio_tint" />
-        </RadioGroup>
+                android:buttonTint="@color/text_yellow" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pet Size"
+            android:textSize="20sp"
+            android:textColor="@color/text_yellow"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="32dp">
+
+            <CheckBox
+                android:id="@+id/cbSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Small"
+                android:textSize="18sp"
+                android:textColor="@color/text_white"
+                android:buttonTint="@color/text_yellow" />
+
+            <CheckBox
+                android:id="@+id/cbMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medium"
+                android:textSize="18sp"
+                android:textColor="@color/text_white"
+                android:layout_marginStart="20dp"
+                android:buttonTint="@color/text_yellow" />
+
+            <CheckBox
+                android:id="@+id/cbLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Large"
+                android:textSize="18sp"
+                android:textColor="@color/text_white"
+                android:layout_marginStart="20dp"
+                android:buttonTint="@color/text_yellow" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -86,9 +129,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:max="100"
-            android:progress="50"
+            android:progress="30"
             android:progressTint="@color/text_yellow"
             android:thumbTint="@color/text_yellow" />
+
+        <Button
+            android:id="@+id/btnSavePreferences"
+            style="@style/RoundedGrayButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Preferences"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/bg_round_button"
+            app:backgroundTint="@null" />
 
     </LinearLayout>
 

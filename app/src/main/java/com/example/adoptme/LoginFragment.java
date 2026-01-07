@@ -29,7 +29,7 @@ public class LoginFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
-        etEmail = view.findViewById(R.id.etUsername); // Matches your Figma 'Username' field
+        etEmail = view.findViewById(R.id.etUsername);
         etPassword = view.findViewById(R.id.etPassword);
         btnLogin = view.findViewById(R.id.btnLoginAction);
 
@@ -42,23 +42,18 @@ public class LoginFragment extends Fragment {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        // DEV BYPASS: use a temporary password to enter the app without Firebase login
-        // IMPORTANT: remove this before you submit or push to main branch
-        if ("dev".equals(email) && "1234".equals(password)) {
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_login_to_explore); // or action_login_to_profile, whatever you want as entry
-            return;
-        }
-
+        // Validation
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(getContext(), "Please enter email and password", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Sign in with Firebase Authentication
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
+                    Toast.makeText(getContext(), "Login successful!", Toast.LENGTH_SHORT).show();
                     NavHostFragment.findNavController(this)
-                            .navigate(R.id.action_login_to_explore); // go straight to Explore after real login too
+                            .navigate(R.id.action_login_to_explore);
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(getContext(), "Login failed: " + e.getMessage(), Toast.LENGTH_LONG).show()

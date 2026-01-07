@@ -64,19 +64,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/chatListFragment"
-        android:name="com.example.adoptme.ChatListFragment"
-        android:label="Chats"
-        tools:layout="@layout/fragment_chat_list" />
-
-    <fragment
         android:id="@+id/profileMenuFragment"
         android:name="com.example.adoptme.ProfileMenuFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile_menu">
-        <action
-            android:id="@+id/action_profileMenu_to_personalDetails"
-            app:destination="@id/personalDetailsFragment" />
         <action
             android:id="@+id/action_profileMenu_to_preferences"
             app:destination="@id/preferencesFragment" />
@@ -93,12 +84,6 @@
         android:name="com.example.adoptme.MatchSuccessFragment"
         android:label="Match"
         tools:layout="@layout/fragment_match_success" />
-
-    <fragment
-        android:id="@+id/personalDetailsFragment"
-        android:name="com.example.adoptme.PersonalDetailsFragment"
-        android:label="Personal Details"
-        tools:layout="@layout/fragment_personal_details" />
 
     <fragment
         android:id="@+id/preferencesFragment"

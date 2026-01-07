@@ -4,14 +4,16 @@ import com.google.firebase.firestore.Exclude;
 
 public class Pet {
     private String name;
-    private String type;
+    private String type; // "Cat" or "Dog"
     private String breed;
-    private String ageCategory;
-    private String gender;
-    private String size;
+    private String ageCategory; // e.g. "Adult", "Puppy", "Kitten", etc.
+    private String gender; // e.g. "Male", "Female", or other
+    private String size; // "Small", "Medium", or "Large"
     private String description;
-    private String location;
+    private String location; // Currently string, will be geolocation in future
     private String imageUrl;
+    private String contactEmail; // Optional - for future use
+    private String contactPhone; // Optional - for future use
 
     private String id;
 
@@ -26,6 +28,8 @@ public class Pet {
     public String getDescription() { return description; }
     public String getLocation() { return location; }
     public String getImageUrl() { return imageUrl; }
+    public String getContactEmail() { return contactEmail; }
+    public String getContactPhone() { return contactPhone; }
 
     @Exclude
     public String getId() { return id; }
@@ -39,6 +43,8 @@ public class Pet {
     public void setDescription(String description) { this.description = description; }
     public void setLocation(String location) { this.location = location; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
+    public void setContactPhone(String contactPhone) { this.contactPhone = contactPhone; }
 
     public void setId(String id) { this.id = id; }
 }

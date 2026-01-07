@@ -51,10 +51,10 @@ public class MatchSuccessFragment extends Fragment {
             }
         }
 
-        // 3. Handle 'Message Shelter' button click
+        // 3. Handle 'Message Shelter' button click - navigate to Favorites
         btnMessageShelter.setOnClickListener(v -> {
             NavHostFragment.findNavController(this)
-                    .navigate(R.id.chatListFragment);
+                    .navigate(R.id.favoritesFragment);
         });
     }
 

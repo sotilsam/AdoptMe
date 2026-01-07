@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="32dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="@color/card_gray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvContactMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Would you like to contact the shelter?"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_yellow"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/tvContactEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email: contact@shelter.com"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvContactPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phone: +1234567890"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnContactClose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Close"
+            android:layout_marginTop="24dp"
+            style="@style/RoundedGrayButton" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

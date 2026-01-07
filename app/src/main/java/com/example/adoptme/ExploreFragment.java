@@ -13,15 +13,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ExploreFragment extends Fragment {
 
@@ -32,6 +33,11 @@ public class ExploreFragment extends Fragment {
 
     private final List<Pet> petList = new ArrayList<>();
     private int currentPetIndex = 0;
+
+    private List<String> userPassedPets = new ArrayList<>();
+    private List<String> userFavoritePets = new ArrayList<>();
+    private List<String> preferredTypes = new ArrayList<>();
+    private List<String> preferredSizes = new ArrayList<>();
 
     public ExploreFragment() {
         super(R.layout.fragment_explore);
@@ -55,30 +61,58 @@ public class ExploreFragment extends Fragment {
         btnInfo = view.findViewById(R.id.btnInfoCircle);
         btnLike = view.findViewById(R.id.btnLikeCircle);
 
-        btnReject.setOnClickListener(v -> showNextPet());
+        btnReject.setOnClickListener(v -> handlePass());
 
         btnInfo.setOnClickListener(v -> {
             Pet pet = getCurrentPet();
             if (pet == null) return;
-
-            Bundle b = new Bundle();
-            b.putString("petId", pet.getId()); // main way
-            b.putString("petName", pet.getName()); // fallback
-            b.putString("petUrl", pet.getImageUrl());
-            b.putString("petDescription", pet.getDescription());
-            b.putString("petShelter", pet.getLocation());
-
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_explore_to_description, b);
+            showPetDetailsDialog(pet);
         });
 
         btnLike.setOnClickListener(v -> {
             Pet pet = getCurrentPet();
             if (pet == null) return;
-            showMessageDialog(pet);
+            handleLike(pet);
         });
 
-        fetchPetsFromFirebase();
+        loadUserPreferencesAndFetchPets();
+    }
+
+    private void loadUserPreferencesAndFetchPets() {
+        String userId = FirebaseAuth.getInstance().getUid();
+        if (userId == null) {
+            Toast.makeText(getContext(), "Please log in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        // Get passed and favorite pets
+                        userPassedPets = (List<String>) doc.get("passed");
+                        if (userPassedPets == null) userPassedPets = new ArrayList<>();
+
+                        userFavoritePets = (List<String>) doc.get("favorites");
+                        if (userFavoritePets == null) userFavoritePets = new ArrayList<>();
+
+                        // Get preferences
+                        Map<String, Object> preferences = (Map<String, Object>) doc.get("preferences");
+                        if (preferences != null) {
+                            preferredTypes = (List<String>) preferences.get("type");
+                            preferredSizes = (List<String>) preferences.get("size");
+                        }
+                        if (preferredTypes == null) preferredTypes = new ArrayList<>();
+                        if (preferredSizes == null) preferredSizes = new ArrayList<>();
+                    }
+                    fetchPetsFromFirebase();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Failed to load user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    fetchPetsFromFirebase();
+                });
     }
 
     private void fetchPetsFromFirebase() {
@@ -90,7 +124,23 @@ public class ExploreFragment extends Fragment {
                     for (DocumentSnapshot doc : query.getDocuments()) {
                         Pet pet = doc.toObject(Pet.class);
                         if (pet != null) {
-                            pet.setId(doc.getId()); // IMPORTANT: keep doc id
+                            pet.setId(doc.getId());
+
+                            // Filter: skip if already passed or favorited
+                            if (userPassedPets.contains(pet.getId()) || userFavoritePets.contains(pet.getId())) {
+                                continue;
+                            }
+
+                            // Filter by type preference
+                            if (!preferredTypes.isEmpty() && pet.getType() != null && !preferredTypes.contains(pet.getType())) {
+                                continue;
+                            }
+
+                            // Filter by size preference
+                            if (!preferredSizes.isEmpty() && pet.getSize() != null && !preferredSizes.contains(pet.getSize())) {
+                                continue;
+                            }
+
                             petList.add(pet);
                         }
                     }
@@ -104,11 +154,9 @@ public class ExploreFragment extends Fragment {
 
     private Pet getCurrentPet() {
         if (petList.isEmpty()) {
-            Toast.makeText(getContext(), "No pets available", Toast.LENGTH_SHORT).show();
             return null;
         }
         if (currentPetIndex < 0 || currentPetIndex >= petList.size()) {
-            Toast.makeText(getContext(), "No more pets!", Toast.LENGTH_SHORT).show();
             return null;
         }
         return petList.get(currentPetIndex);
@@ -116,7 +164,13 @@ public class ExploreFragment extends Fragment {
 
     private void displayCurrentPet() {
         Pet pet = getCurrentPet();
-        if (pet == null) return;
+        if (pet == null) {
+            tvPetName.setText("No pets available");
+            tvPetBreed.setText("");
+            tvPetInfo.setText("");
+            ivPetImage.setImageResource(android.R.drawable.ic_menu_gallery);
+            return;
+        }
 
         tvPetName.setText(pet.getName() != null ? pet.getName() : "");
         tvPetBreed.setText(pet.getBreed() != null ? pet.getBreed() : "");
@@ -133,16 +187,56 @@ public class ExploreFragment extends Fragment {
                 .into(ivPetImage);
     }
 
+    private void handlePass() {
+        Pet pet = getCurrentPet();
+        if (pet == null) return;
+
+        String userId = FirebaseAuth.getInstance().getUid();
+        if (userId == null) return;
+
+        // Add to passed array
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .update("passed", FieldValue.arrayUnion(pet.getId()))
+                .addOnSuccessListener(aVoid -> {
+                    userPassedPets.add(pet.getId());
+                    showNextPet();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getContext(), "Failed to pass pet: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    private void handleLike(Pet pet) {
+        String userId = FirebaseAuth.getInstance().getUid();
+        if (userId == null) return;
+
+        // Add to favorites array
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .update("favorites", FieldValue.arrayUnion(pet.getId()))
+                .addOnSuccessListener(aVoid -> {
+                    userFavoritePets.add(pet.getId());
+                    showContactDialog(pet);
+                    showNextPet();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getContext(), "Failed to add to favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
     private void showNextPet() {
         if (petList.isEmpty()) {
-            Toast.makeText(getContext(), "No pets available", Toast.LENGTH_SHORT).show();
+            displayCurrentPet();
             return;
         }
 
         currentPetIndex++;
 
         if (currentPetIndex >= petList.size()) {
-            Toast.makeText(getContext(), "No more pets!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No more pets! Check your preferences.", Toast.LENGTH_SHORT).show();
             currentPetIndex = petList.size() - 1;
             return;
         }
@@ -150,53 +244,74 @@ public class ExploreFragment extends Fragment {
         displayCurrentPet();
     }
 
-    private void showMessageDialog(Pet pet) {
+    private void showPetDetailsDialog(Pet pet) {
         Dialog dialog = new Dialog(requireContext());
-        dialog.setContentView(R.layout.dialog_message_shelter);
+        dialog.setContentView(R.layout.dialog_pet_details);
 
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        Button btnYes = dialog.findViewById(R.id.btnYes);
-        Button btnNo = dialog.findViewById(R.id.btnNo);
+        ImageView ivPet = dialog.findViewById(R.id.ivDialogPetImage);
+        TextView tvName = dialog.findViewById(R.id.tvDialogPetName);
+        TextView tvBreed = dialog.findViewById(R.id.tvDialogBreed);
+        TextView tvAge = dialog.findViewById(R.id.tvDialogAge);
+        TextView tvGender = dialog.findViewById(R.id.tvDialogGender);
+        TextView tvSize = dialog.findViewById(R.id.tvDialogSize);
+        TextView tvLocation = dialog.findViewById(R.id.tvDialogLocation);
+        TextView tvDescription = dialog.findViewById(R.id.tvDialogDescription);
+        Button btnClose = dialog.findViewById(R.id.btnDialogClose);
 
-        btnYes.setOnClickListener(v -> {
-            dialog.dismiss();
-            addToFavorites(pet);
+        Glide.with(this)
+                .load(pet.getImageUrl())
+                .centerCrop()
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .into(ivPet);
 
-            Bundle args = new Bundle();
-            args.putString("petId", pet.getId());
-            args.putString("petName", pet.getName());
-            args.putString("petImage", pet.getImageUrl());
+        tvName.setText(pet.getName() != null ? pet.getName() : "Unknown");
+        tvBreed.setText("Breed: " + (pet.getBreed() != null ? pet.getBreed() : "Unknown"));
+        tvAge.setText("Age: " + (pet.getAgeCategory() != null ? pet.getAgeCategory() : "Unknown"));
+        tvGender.setText("Gender: " + (pet.getGender() != null ? pet.getGender() : "Unknown"));
+        tvSize.setText("Size: " + (pet.getSize() != null ? pet.getSize() : "Unknown"));
+        tvLocation.setText("Location: " + (pet.getLocation() != null ? pet.getLocation() : "Unknown"));
+        tvDescription.setText(pet.getDescription() != null ? pet.getDescription() : "No description available");
 
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_explore_to_matchSuccess, args);
-
-            showNextPet();
-        });
-
-        btnNo.setOnClickListener(v -> {
-            dialog.dismiss();
-            showNextPet();
-        });
+        btnClose.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
     }
 
-    private void addToFavorites(Pet pet) {
-        String userId = FirebaseAuth.getInstance().getUid();
-        if (userId == null) return;
+    private void showContactDialog(Pet pet) {
+        Dialog dialog = new Dialog(requireContext());
+        dialog.setContentView(R.layout.dialog_contact_shelter);
 
-        String favDocId = (pet.getId() != null && !pet.getId().trim().isEmpty())
-                ? pet.getId()
-                : (pet.getName() != null ? pet.getName() : String.valueOf(System.currentTimeMillis()));
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
-        FirebaseFirestore.getInstance()
-                .collection("users")
-                .document(userId)
-                .collection("favorites")
-                .document(favDocId)
-                .set(pet);
+        TextView tvMessage = dialog.findViewById(R.id.tvContactMessage);
+        TextView tvEmail = dialog.findViewById(R.id.tvContactEmail);
+        TextView tvPhone = dialog.findViewById(R.id.tvContactPhone);
+        Button btnClose = dialog.findViewById(R.id.btnContactClose);
+
+        tvMessage.setText("Would you like to contact the shelter about " + (pet.getName() != null ? pet.getName() : "this pet") + "?");
+
+        if (pet.getContactEmail() != null && !pet.getContactEmail().isEmpty()) {
+            tvEmail.setText("Email: " + pet.getContactEmail());
+            tvEmail.setVisibility(View.VISIBLE);
+        } else {
+            tvEmail.setVisibility(View.GONE);
+        }
+
+        if (pet.getContactPhone() != null && !pet.getContactPhone().isEmpty()) {
+            tvPhone.setText("Phone: " + pet.getContactPhone());
+            tvPhone.setVisibility(View.VISIBLE);
+        } else {
+            tvPhone.setVisibility(View.GONE);
+        }
+
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 }
