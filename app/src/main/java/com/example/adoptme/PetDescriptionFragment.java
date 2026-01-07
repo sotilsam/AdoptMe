@@ -95,7 +95,7 @@ public class PetDescriptionFragment extends Fragment {
                     // Map Firestore fields
                     String name = pet.getName() != null ? pet.getName() : "";
                     String description = pet.getDescription() != null ? pet.getDescription() : "";
-                    String hostedBy = pet.getLocation() != null ? pet.getLocation() : "Unknown shelter";
+                    String hostedBy = pet.getLocation() != null ? pet.getLocationString() : "Unknown location";
                     String imageUrl = pet.getImageUrl();
 
                     tvTitleName.setText(name);

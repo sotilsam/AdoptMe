@@ -26,25 +26,27 @@
             android:gravity="center"
             android:layout_gravity="center_horizontal" />
 
-        <TextView
-            android:id="@+id/tvContactEmail"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btnContactEmail"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Email: contact@shelter.com"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@color/white"
             android:layout_marginTop="20dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            style="@style/RoundedGrayButton" />
 
-        <TextView
-            android:id="@+id/tvContactPhone"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btnContactPhone"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Phone: +1234567890"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            style="@style/RoundedGrayButton" />
 
         <Button
             android:id="@+id/btnContactClose"

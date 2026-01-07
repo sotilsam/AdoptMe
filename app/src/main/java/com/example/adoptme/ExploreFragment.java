@@ -2,6 +2,8 @@ package com.example.adoptme;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -30,6 +32,7 @@ public class ExploreFragment extends Fragment {
     private TextView tvPetName, tvPetBreed, tvPetInfo;
 
     private ImageButton btnReject, btnInfo, btnLike;
+    private FrameLayout cardContainer;
 
     private final List<Pet> petList = new ArrayList<>();
     private int currentPetIndex = 0;
@@ -38,6 +41,8 @@ public class ExploreFragment extends Fragment {
     private List<String> userFavoritePets = new ArrayList<>();
     private List<String> preferredTypes = new ArrayList<>();
     private List<String> preferredSizes = new ArrayList<>();
+
+    private GestureDetector gestureDetector;
 
     public ExploreFragment() {
         super(R.layout.fragment_explore);
@@ -48,7 +53,7 @@ public class ExploreFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Card UI (inside include)
-        FrameLayout cardContainer = view.findViewById(R.id.exploreCardContainer);
+        cardContainer = view.findViewById(R.id.exploreCardContainer);
         if (cardContainer != null) {
             ivPetImage = cardContainer.findViewById(R.id.ivPetImage);
             tvPetName = cardContainer.findViewById(R.id.tvPetName);
@@ -75,7 +80,45 @@ public class ExploreFragment extends Fragment {
             handleLike(pet);
         });
 
+        // Setup swipe gestures
+        setupSwipeGestures();
+
         loadUserPreferencesAndFetchPets();
+    }
+
+    private void setupSwipeGestures() {
+        gestureDetector = new GestureDetector(requireContext(), new GestureDetector.SimpleOnGestureListener() {
+            private static final int SWIPE_THRESHOLD = 100;
+            private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                float diffX = e2.getX() - e1.getX();
+                float diffY = e2.getY() - e1.getY();
+
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffX > 0) {
+                            // Swipe right - Like
+                            Pet pet = getCurrentPet();
+                            if (pet != null) handleLike(pet);
+                        } else {
+                            // Swipe left - Pass
+                            handlePass();
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        if (cardContainer != null) {
+            cardContainer.setOnTouchListener((v, event) -> {
+                gestureDetector.onTouchEvent(event);
+                return true;
+            });
+        }
     }
 
     private void loadUserPreferencesAndFetchPets() {
@@ -177,7 +220,7 @@ public class ExploreFragment extends Fragment {
 
         String info = "";
         if (pet.getAgeCategory() != null) info += pet.getAgeCategory();
-        if (pet.getLocation() != null) info += (info.isEmpty() ? "" : ", ") + pet.getLocation();
+        if (pet.getLocation() != null) info += (info.isEmpty() ? "" : ", ") + pet.getLocationString();
         tvPetInfo.setText(info);
 
         Glide.with(this)
@@ -258,7 +301,7 @@ public class ExploreFragment extends Fragment {
         TextView tvAge = dialog.findViewById(R.id.tvDialogAge);
         TextView tvGender = dialog.findViewById(R.id.tvDialogGender);
         TextView tvSize = dialog.findViewById(R.id.tvDialogSize);
-        TextView tvLocation = dialog.findViewById(R.id.tvDialogLocation);
+        Button btnLocation = dialog.findViewById(R.id.btnDialogLocation);
         TextView tvDescription = dialog.findViewById(R.id.tvDialogDescription);
         Button btnClose = dialog.findViewById(R.id.btnDialogClose);
 
@@ -273,12 +316,42 @@ public class ExploreFragment extends Fragment {
         tvAge.setText("Age: " + (pet.getAgeCategory() != null ? pet.getAgeCategory() : "Unknown"));
         tvGender.setText("Gender: " + (pet.getGender() != null ? pet.getGender() : "Unknown"));
         tvSize.setText("Size: " + (pet.getSize() != null ? pet.getSize() : "Unknown"));
-        tvLocation.setText("Location: " + (pet.getLocation() != null ? pet.getLocation() : "Unknown"));
         tvDescription.setText(pet.getDescription() != null ? pet.getDescription() : "No description available");
+
+        // Handle location button
+        if (pet.getLocation() != null) {
+            btnLocation.setVisibility(View.VISIBLE);
+            btnLocation.setOnClickListener(v -> openGoogleMaps(pet.getLocation()));
+        } else {
+            btnLocation.setVisibility(View.GONE);
+        }
 
         btnClose.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
+    }
+
+    private void openGoogleMaps(com.google.firebase.firestore.GeoPoint location) {
+        if (location == null) return;
+
+        String uri = String.format("geo:%f,%f?q=%f,%f",
+            location.getLatitude(), location.getLongitude(),
+            location.getLatitude(), location.getLongitude());
+
+        android.content.Intent mapIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW,
+            android.net.Uri.parse(uri));
+        mapIntent.setPackage("com.google.android.apps.maps");
+
+        if (mapIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            startActivity(mapIntent);
+        } else {
+            // Fallback to browser if Google Maps not installed
+            String browserUri = String.format("https://www.google.com/maps/search/?api=1&query=%f,%f",
+                location.getLatitude(), location.getLongitude());
+            android.content.Intent browserIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW,
+                android.net.Uri.parse(browserUri));
+            startActivity(browserIntent);
+        }
     }
 
     private void showContactDialog(Pet pet) {
@@ -290,24 +363,35 @@ public class ExploreFragment extends Fragment {
         }
 
         TextView tvMessage = dialog.findViewById(R.id.tvContactMessage);
-        TextView tvEmail = dialog.findViewById(R.id.tvContactEmail);
-        TextView tvPhone = dialog.findViewById(R.id.tvContactPhone);
+        Button btnEmail = dialog.findViewById(R.id.btnContactEmail);
+        Button btnPhone = dialog.findViewById(R.id.btnContactPhone);
         Button btnClose = dialog.findViewById(R.id.btnContactClose);
 
         tvMessage.setText("Would you like to contact the shelter about " + (pet.getName() != null ? pet.getName() : "this pet") + "?");
 
         if (pet.getContactEmail() != null && !pet.getContactEmail().isEmpty()) {
-            tvEmail.setText("Email: " + pet.getContactEmail());
-            tvEmail.setVisibility(View.VISIBLE);
+            btnEmail.setText("Email: " + pet.getContactEmail());
+            btnEmail.setVisibility(View.VISIBLE);
+            btnEmail.setOnClickListener(v -> {
+                android.content.Intent emailIntent = new android.content.Intent(android.content.Intent.ACTION_SENDTO);
+                emailIntent.setData(android.net.Uri.parse("mailto:" + pet.getContactEmail()));
+                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Inquiry about " + pet.getName());
+                startActivity(android.content.Intent.createChooser(emailIntent, "Send email"));
+            });
         } else {
-            tvEmail.setVisibility(View.GONE);
+            btnEmail.setVisibility(View.GONE);
         }
 
         if (pet.getContactPhone() != null && !pet.getContactPhone().isEmpty()) {
-            tvPhone.setText("Phone: " + pet.getContactPhone());
-            tvPhone.setVisibility(View.VISIBLE);
+            btnPhone.setText("Call: " + pet.getContactPhone());
+            btnPhone.setVisibility(View.VISIBLE);
+            btnPhone.setOnClickListener(v -> {
+                android.content.Intent dialIntent = new android.content.Intent(android.content.Intent.ACTION_DIAL);
+                dialIntent.setData(android.net.Uri.parse("tel:" + pet.getContactPhone()));
+                startActivity(dialIntent);
+            });
         } else {
-            tvPhone.setVisibility(View.GONE);
+            btnPhone.setVisibility(View.GONE);
         }
 
         btnClose.setOnClickListener(v -> dialog.dismiss());

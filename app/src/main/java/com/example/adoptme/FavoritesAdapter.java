@@ -95,11 +95,10 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         TextView tvAge = dialog.findViewById(R.id.tvFavDetailAge);
         TextView tvGender = dialog.findViewById(R.id.tvFavDetailGender);
         TextView tvSize = dialog.findViewById(R.id.tvFavDetailSize);
-        TextView tvLocation = dialog.findViewById(R.id.tvFavDetailLocation);
+        Button btnLocation = dialog.findViewById(R.id.btnFavDetailLocation);
         TextView tvDescription = dialog.findViewById(R.id.tvFavDetailDescription);
-        TextView tvEmail = dialog.findViewById(R.id.tvFavDetailEmail);
-        TextView tvPhone = dialog.findViewById(R.id.tvFavDetailPhone);
-        Button btnContact = dialog.findViewById(R.id.btnFavContact);
+        Button btnEmail = dialog.findViewById(R.id.btnFavDetailEmail);
+        Button btnPhone = dialog.findViewById(R.id.btnFavDetailPhone);
         Button btnClose = dialog.findViewById(R.id.btnFavDetailClose);
 
         Glide.with(view.getContext())
@@ -113,43 +112,68 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         tvAge.setText("Age: " + (pet.getAgeCategory() != null ? pet.getAgeCategory() : "Unknown"));
         tvGender.setText("Gender: " + (pet.getGender() != null ? pet.getGender() : "Unknown"));
         tvSize.setText("Size: " + (pet.getSize() != null ? pet.getSize() : "Unknown"));
-        tvLocation.setText("Location: " + (pet.getLocation() != null ? pet.getLocation() : "Unknown"));
         tvDescription.setText(pet.getDescription() != null ? pet.getDescription() : "No description available");
 
-        // Show contact info if available
-        boolean hasContact = false;
-        if (pet.getContactEmail() != null && !pet.getContactEmail().isEmpty()) {
-            tvEmail.setText("Email: " + pet.getContactEmail());
-            tvEmail.setVisibility(View.VISIBLE);
-            hasContact = true;
+        // Handle location button
+        if (pet.getLocation() != null) {
+            btnLocation.setVisibility(View.VISIBLE);
+            btnLocation.setOnClickListener(v -> openGoogleMaps(view, pet.getLocation()));
         } else {
-            tvEmail.setVisibility(View.GONE);
+            btnLocation.setVisibility(View.GONE);
+        }
+
+        // Show contact info if available
+        if (pet.getContactEmail() != null && !pet.getContactEmail().isEmpty()) {
+            btnEmail.setText("Email: " + pet.getContactEmail());
+            btnEmail.setVisibility(View.VISIBLE);
+            btnEmail.setOnClickListener(v -> {
+                android.content.Intent emailIntent = new android.content.Intent(android.content.Intent.ACTION_SENDTO);
+                emailIntent.setData(android.net.Uri.parse("mailto:" + pet.getContactEmail()));
+                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Inquiry about " + pet.getName());
+                view.getContext().startActivity(android.content.Intent.createChooser(emailIntent, "Send email"));
+            });
+        } else {
+            btnEmail.setVisibility(View.GONE);
         }
 
         if (pet.getContactPhone() != null && !pet.getContactPhone().isEmpty()) {
-            tvPhone.setText("Phone: " + pet.getContactPhone());
-            tvPhone.setVisibility(View.VISIBLE);
-            hasContact = true;
-        } else {
-            tvPhone.setVisibility(View.GONE);
-        }
-
-        // Show or hide contact button based on availability
-        if (hasContact) {
-            btnContact.setVisibility(View.VISIBLE);
-            btnContact.setOnClickListener(v -> {
-                // Contact info is already displayed above
-                android.widget.Toast.makeText(view.getContext(),
-                    "Use the contact details above to reach out!",
-                    android.widget.Toast.LENGTH_SHORT).show();
+            btnPhone.setText("Call: " + pet.getContactPhone());
+            btnPhone.setVisibility(View.VISIBLE);
+            btnPhone.setOnClickListener(v -> {
+                android.content.Intent dialIntent = new android.content.Intent(android.content.Intent.ACTION_DIAL);
+                dialIntent.setData(android.net.Uri.parse("tel:" + pet.getContactPhone()));
+                view.getContext().startActivity(dialIntent);
             });
         } else {
-            btnContact.setVisibility(View.GONE);
+            btnPhone.setVisibility(View.GONE);
         }
 
         btnClose.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
+    }
+
+    private void openGoogleMaps(View view, com.google.firebase.firestore.GeoPoint location) {
+        if (location == null) return;
+
+        String uri = String.format("geo:%f,%f?q=%f,%f",
+            location.getLatitude(), location.getLongitude(),
+            location.getLatitude(), location.getLongitude());
+
+        android.content.Intent mapIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW,
+            android.net.Uri.parse(uri));
+        mapIntent.setPackage("com.google.android.apps.maps");
+
+        if (mapIntent.resolveActivity(view.getContext().getPackageManager()) != null) {
+            view.getContext().startActivity(mapIntent);
+        } else {
+            // Fallback to browser if Google Maps not installed
+            String browserUri = String.format("https://www.google.com/maps/search/?api=1&query=%f,%f",
+                location.getLatitude(), location.getLongitude());
+            android.content.Intent browserIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW,
+                android.net.Uri.parse(browserUri));
+            view.getContext().startActivity(browserIntent);
+        }
     }
 
     @Override

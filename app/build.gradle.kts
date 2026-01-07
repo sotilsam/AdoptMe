@@ -58,6 +58,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
 
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
