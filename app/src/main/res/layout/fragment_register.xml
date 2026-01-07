@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
-        android:textColor="@color/text_yellow"
+        android:textColor="@color/primary_blue"
         android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,88 +21,113 @@
         android:layout_marginTop="40dp"/>
 
 
-    <EditText
-        android:id="@+id/etFullName"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilFullName"
+        style="@style/TextInputStyle"
         android:layout_width="0dp"
-        android:layout_height="@dimen/btn_height"
+        android:layout_height="wrap_content"
         android:hint="Full name*"
-        android:textColorHint="#888888"
-        android:textColor="@color/white"
-        android:background="@drawable/bg_round_button"
-        android:paddingStart="15dp"
         app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginTop="32dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etFullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/etEmail"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEmail"
+        style="@style/TextInputStyle"
         android:layout_width="0dp"
-        android:layout_height="@dimen/btn_height"
+        android:layout_height="wrap_content"
         android:hint="Email*"
-        android:inputType="textEmailAddress"
-        android:textColorHint="#888888"
-        android:textColor="@color/white"
-        android:background="@drawable/bg_round_button"
-        android:paddingStart="15dp"
-        app:layout_constraintTop_toBottomOf="@id/etFullName"
+        app:layout_constraintTop_toBottomOf="@id/tilFullName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="12dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/etPhone"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilPhone"
+        style="@style/TextInputStyle"
         android:layout_width="0dp"
-        android:layout_height="@dimen/btn_height"
+        android:layout_height="wrap_content"
         android:hint="Phone*"
-        android:inputType="phone"
-        android:textColorHint="#888888"
-        android:textColor="@color/white"
-        android:background="@drawable/bg_round_button"
-        android:paddingStart="15dp"
-        app:layout_constraintTop_toBottomOf="@id/etEmail"
+        app:layout_constraintTop_toBottomOf="@id/tilEmail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="12dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/etPassword"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilPassword"
+        style="@style/TextInputStyle"
         android:layout_width="0dp"
-        android:layout_height="@dimen/btn_height"
+        android:layout_height="wrap_content"
         android:hint="Password*"
-        android:inputType="textPassword"
-        android:textColorHint="#888888"
-        android:textColor="@color/white"
-        android:background="@drawable/bg_round_button"
-        android:paddingStart="15dp"
-        app:layout_constraintTop_toBottomOf="@id/etPhone"
+        app:endIconMode="password_toggle"
+        app:layout_constraintTop_toBottomOf="@id/tilPhone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="12dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/etConfirmPassword"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilConfirmPassword"
+        style="@style/TextInputStyle"
         android:layout_width="0dp"
-        android:layout_height="@dimen/btn_height"
+        android:layout_height="wrap_content"
         android:hint="Re-enter Password*"
-        android:inputType="textPassword"
-        android:textColorHint="#888888"
-        android:textColor="@color/white"
-        android:background="@drawable/bg_round_button"
-        android:paddingStart="15dp"
-        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        app:endIconMode="password_toggle"
+        app:layout_constraintTop_toBottomOf="@id/tilPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="12dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegisterAction"
-        style="@style/RoundedGrayButton"
-        app:backgroundTint="@null"
+        style="@style/PrimaryButton"
         android:layout_width="0dp"
+        android:layout_height="56dp"
         android:text="Register"
-        android:layout_marginTop="40dp"
-        app:layout_constraintTop_toBottomOf="@id/etConfirmPassword"
+        app:backgroundTint="@color/primary_blue"
+        android:textColor="@color/text_on_primary"
+        app:cornerRadius="@dimen/btn_radius"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/tilConfirmPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

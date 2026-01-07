@@ -1,19 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Brand colors - New blue theme -->
+    <color name="primary_blue">#1C5D99</color>
+    <color name="primary_light_blue">#639FAB</color>
+    <color name="primary_blue_dark">#164A7A</color>
+    <color name="primary_blue_light">#2A7BC4</color>
+
+    <!-- Background colors -->
+    <color name="app_bg">#F8F9FA</color>
+    <color name="card_bg">#FFFFFF</color>
+    <color name="surface_bg">#FFFFFF</color>
+    <color name="surface_variant">#F1F3F5</color>
+
+    <!-- Text colors -->
+    <color name="text_primary">#212529</color>
+    <color name="text_secondary">#495057</color>
+    <color name="text_tertiary">#6C757D</color>
+    <color name="text_hint">#ADB5BD</color>
+    <color name="text_on_primary">#FFFFFF</color>
+
+    <!-- Accent colors for actions -->
+    <color name="accent_like">#52B788</color>
+    <color name="accent_like_light">#95D5B2</color>
+    <color name="accent_reject">#E63946</color>
+    <color name="accent_reject_light">#F48C94</color>
+    <color name="accent_info">#1C5D99</color>
+    <color name="accent_info_light">#639FAB</color>
+
+    <!-- Semantic colors -->
+    <color name="success">#52B788</color>
+    <color name="error">#E63946</color>
+    <color name="warning">#F4A261</color>
+    <color name="info">#1C5D99</color>
+
+    <!-- Legacy colors (for backwards compatibility during transition) -->
     <color name="app_yellow">#E6D27A</color>
-    <color name="app_bg">#2C2F33</color>
-    <color name="card_gray">#454545</color>
-    <color name="text_white">#FFFFFF</color>
-    <color name="text_yellow">#E6D27A</color>
-    <color name="logout_red">#bd0202</color>
-    <color name="gold_header">#EBB74E</color>
-    <color name="purple_dark">#3E2F5B</color>
-    <color name="input_bg">#3F3F3F</color>
+    <color name="card_gray">#FFFFFF</color>
+    <color name="text_white">#212529</color>
+    <color name="text_yellow">#1C5D99</color>
+    <color name="logout_red">#E63946</color>
+    <color name="gold_header">#1C5D99</color>
+    <color name="purple_dark">#164A7A</color>
+    <color name="input_bg">#FFFFFF</color>
+    <color name="slider_blue">#639FAB</color>
 
+    <!-- Divider and border colors -->
+    <color name="divider">#DEE2E6</color>
+    <color name="border">#CED4DA</color>
+    <color name="border_focused">#1C5D99</color>
 
-
-
-    <color name="slider_blue">#67CDEB</color>
+    <!-- Ripple and state colors -->
+    <color name="ripple_primary">#331C5D99</color>
+    <color name="ripple_surface">#1A000000</color>
 </resources>

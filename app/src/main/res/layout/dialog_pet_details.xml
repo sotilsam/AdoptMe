@@ -7,7 +7,7 @@
     android:layout_margin="24dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="8dp"
-    app:cardBackgroundColor="@color/card_gray">
+    app:cardBackgroundColor="@color/card_bg">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:text="Pet Name"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_yellow"
+                android:textColor="@color/primary_blue"
                 android:layout_marginTop="16dp" />
 
             <TextView
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:text="Breed: Unknown"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="@color/text_secondary"
                 android:layout_marginTop="8dp" />
 
             <TextView
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:text="Age: Unknown"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="@color/text_secondary"
                 android:layout_marginTop="4dp" />
 
             <TextView
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:text="Gender: Unknown"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="@color/text_secondary"
                 android:layout_marginTop="4dp" />
 
             <TextView
@@ -69,18 +69,20 @@
                 android:layout_height="wrap_content"
                 android:text="Size: Unknown"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="@color/text_secondary"
                 android:layout_marginTop="4dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDialogLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="📍 View Location on Map"
                 android:textSize="14sp"
-                android:textColor="@color/white"
-                android:layout_marginTop="12dp"
-                style="@style/RoundedGrayButton" />
+                android:textColor="@color/text_on_primary"
+                app:backgroundTint="@color/primary_light_blue"
+                app:cornerRadius="@dimen/btn_radius"
+                style="@style/PrimaryButton"
+                android:layout_marginTop="12dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -88,7 +90,7 @@
                 android:text="Description:"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_yellow"
+                android:textColor="@color/primary_blue"
                 android:layout_marginTop="16dp" />
 
             <TextView
@@ -97,16 +99,19 @@
                 android:layout_height="wrap_content"
                 android:text="No description available"
                 android:textSize="14sp"
-                android:textColor="@color/white"
+                android:textColor="@color/text_secondary"
                 android:layout_marginTop="8dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDialogClose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Close"
-                android:layout_marginTop="20dp"
-                style="@style/RoundedGrayButton" />
+                android:textColor="@color/primary_blue"
+                app:strokeColor="@color/primary_blue"
+                app:cornerRadius="@dimen/btn_radius"
+                style="@style/SecondaryButton"
+                android:layout_marginTop="20dp" />
 
         </LinearLayout>
     </ScrollView>

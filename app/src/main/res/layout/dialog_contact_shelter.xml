@@ -7,7 +7,7 @@
     android:layout_margin="32dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="8dp"
-    app:cardBackgroundColor="@color/card_gray">
+    app:cardBackgroundColor="@color/card_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,39 +22,46 @@
             android:text="Would you like to contact the shelter?"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@color/text_yellow"
+            android:textColor="@color/primary_blue"
             android:gravity="center"
             android:layout_gravity="center_horizontal" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnContactEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Email: contact@shelter.com"
             android:textSize="14sp"
-            android:textColor="@color/white"
+            android:textColor="@color/text_on_primary"
+            app:backgroundTint="@color/primary_blue"
+            app:cornerRadius="@dimen/btn_radius"
             android:layout_marginTop="20dp"
             android:visibility="gone"
-            style="@style/RoundedGrayButton" />
+            style="@style/PrimaryButton" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnContactPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Phone: +1234567890"
             android:textSize="14sp"
-            android:textColor="@color/white"
+            android:textColor="@color/text_on_primary"
+            app:backgroundTint="@color/primary_light_blue"
+            app:cornerRadius="@dimen/btn_radius"
             android:layout_marginTop="8dp"
             android:visibility="gone"
-            style="@style/RoundedGrayButton" />
+            style="@style/PrimaryButton" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnContactClose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Close"
+            android:textColor="@color/primary_blue"
+            app:strokeColor="@color/primary_blue"
+            app:cornerRadius="@dimen/btn_radius"
             android:layout_marginTop="24dp"
-            style="@style/RoundedGrayButton" />
+            style="@style/SecondaryButton" />
 
     </LinearLayout>
 

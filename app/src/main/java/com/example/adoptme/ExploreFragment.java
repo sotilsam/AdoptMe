@@ -103,38 +103,98 @@ public class ExploreFragment extends Fragment {
     }
 
     private void setupSwipeGestures() {
-        gestureDetector = new GestureDetector(requireContext(), new GestureDetector.SimpleOnGestureListener() {
-            private static final int SWIPE_THRESHOLD = 100;
-            private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+        if (cardContainer == null) return;
 
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                float diffX = e2.getX() - e1.getX();
-                float diffY = e2.getY() - e1.getY();
+        final float[] dX = {0};
+        final float[] dY = {0};
+        final float[] startX = {0};
+        final float[] startY = {0};
+        final boolean[] isDragging = {false};
 
-                if (Math.abs(diffX) > Math.abs(diffY)) {
-                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffX > 0) {
+        cardContainer.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    // Record starting position
+                    dX[0] = v.getX() - event.getRawX();
+                    dY[0] = v.getY() - event.getRawY();
+                    startX[0] = event.getRawX();
+                    startY[0] = event.getRawY();
+                    isDragging[0] = false;
+                    return true;
+
+                case MotionEvent.ACTION_MOVE:
+                    float newX = event.getRawX() + dX[0];
+                    float deltaX = event.getRawX() - startX[0];
+                    float deltaY = event.getRawY() - startY[0];
+
+                    // Check if user is actually dragging (moved more than threshold)
+                    if (!isDragging[0] && (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10)) {
+                        isDragging[0] = true;
+                    }
+
+                    if (isDragging[0]) {
+                        // Move card horizontally with finger
+                        v.setX(newX);
+
+                        // Add rotation effect based on swipe distance
+                        float rotation = deltaX / 20f;
+                        v.setRotation(rotation);
+
+                        // Add slight scale effect
+                        float scale = 1.0f - (Math.abs(deltaX) / 3000f);
+                        v.setScaleX(Math.max(0.9f, scale));
+                        v.setScaleY(Math.max(0.9f, scale));
+
+                        // Change alpha based on swipe distance
+                        float alpha = 1.0f - (Math.abs(deltaX) / 800f);
+                        v.setAlpha(Math.max(0.5f, alpha));
+                    }
+                    return true;
+
+                case MotionEvent.ACTION_UP:
+                    float finalDeltaX = event.getRawX() - startX[0];
+                    float threshold = v.getWidth() / 3f;
+
+                    if (Math.abs(finalDeltaX) > threshold) {
+                        // Swipe completed - animate off screen
+                        if (finalDeltaX > 0) {
                             // Swipe right - Like
+                            animateCardOffScreen(v, true);
                             Pet pet = getCurrentPet();
                             if (pet != null) handleLike(pet);
                         } else {
                             // Swipe left - Pass
+                            animateCardOffScreen(v, false);
                             handlePass();
                         }
-                        return true;
+                    } else {
+                        // Swipe not completed - animate back to center
+                        v.animate()
+                                .x(0)
+                                .y(0)
+                                .rotation(0)
+                                .scaleX(1.0f)
+                                .scaleY(1.0f)
+                                .alpha(1.0f)
+                                .setDuration(200)
+                                .start();
                     }
-                }
-                return false;
+                    return true;
             }
+            return false;
         });
+    }
 
-        if (cardContainer != null) {
-            cardContainer.setOnTouchListener((v, event) -> {
-                gestureDetector.onTouchEvent(event);
-                return true;
-            });
-        }
+    private void animateCardOffScreen(View card, boolean swipeRight) {
+        float targetX = swipeRight ? card.getWidth() * 2 : -card.getWidth() * 2;
+        float rotation = swipeRight ? 30 : -30;
+
+        card.animate()
+                .x(targetX)
+                .rotation(rotation)
+                .alpha(0)
+                .setDuration(300)
+                .start();
     }
 
     private void loadUserPreferencesAndFetchPets() {
@@ -328,7 +388,10 @@ public class ExploreFragment extends Fragment {
                 .update("passed", FieldValue.arrayUnion(pet.getId()))
                 .addOnSuccessListener(aVoid -> {
                     userPassedPets.add(pet.getId());
-                    showNextPet();
+                    // Delay to let animation finish
+                    if (cardContainer != null) {
+                        cardContainer.postDelayed(this::showNextPet, 300);
+                    }
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(getContext(), "Failed to pass pet: " + e.getMessage(), Toast.LENGTH_SHORT).show()
@@ -347,7 +410,10 @@ public class ExploreFragment extends Fragment {
                 .addOnSuccessListener(aVoid -> {
                     userFavoritePets.add(pet.getId());
                     showContactDialog(pet);
-                    showNextPet();
+                    // Delay to let animation finish
+                    if (cardContainer != null) {
+                        cardContainer.postDelayed(this::showNextPet, 300);
+                    }
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(getContext(), "Failed to add to favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show()
@@ -369,6 +435,21 @@ public class ExploreFragment extends Fragment {
         }
 
         displayCurrentPet();
+
+        // Reset card position and animate entrance
+        if (cardContainer != null) {
+            // Reset transformations
+            cardContainer.setX(0);
+            cardContainer.setY(0);
+            cardContainer.setRotation(0);
+            cardContainer.setScaleX(1.0f);
+            cardContainer.setScaleY(1.0f);
+            cardContainer.setAlpha(1.0f);
+
+            // Animate new card entrance
+            android.view.animation.Animation enterAnimation = android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.card_enter);
+            cardContainer.startAnimation(enterAnimation);
+        }
     }
 
     private void showPetDetailsDialog(Pet pet) {

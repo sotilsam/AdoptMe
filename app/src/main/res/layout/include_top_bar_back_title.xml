@@ -5,7 +5,7 @@
     android:id="@+id/headerBar"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:background="@color/app_yellow">
+    android:background="@color/primary_blue">
 
     <ImageButton
         android:id="@+id/btnBack"
@@ -16,7 +16,7 @@
         android:padding="14dp"
         android:scaleType="fitCenter"
         android:src="@drawable/left"
-        app:tint="@color/black"
+        app:tint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Title"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"

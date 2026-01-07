@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
-    <solid android:color="#E58C8C" />
-</shape>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/accent_reject_light">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/accent_reject" />
+        </shape>
+    </item>
+</ripple>

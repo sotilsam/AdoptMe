@@ -26,39 +26,45 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnRejectCircle"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/bg_circle_red"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/x"
-            android:padding="10dp"
-            android:scaleType="fitCenter" />
+            app:fabSize="normal"
+            app:backgroundTint="@color/accent_reject"
+            app:tint="@color/white"
+            app:elevation="4dp"
+            app:borderWidth="0dp" />
 
-        <Space android:layout_width="55dp" android:layout_height="wrap_content" />
+        <Space android:layout_width="48dp" android:layout_height="wrap_content" />
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnInfoCircle"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/bg_circle_blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/info_i"
-            android:padding="12dp"
-            android:scaleType="fitCenter" />
+            app:fabSize="normal"
+            app:backgroundTint="@color/accent_info"
+            app:tint="@color/white"
+            app:elevation="4dp"
+            app:borderWidth="0dp" />
 
-        <Space android:layout_width="55dp" android:layout_height="wrap_content" />
+        <Space android:layout_width="48dp" android:layout_height="wrap_content" />
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnLikeCircle"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/bg_circle_yellow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/favorite"
-            android:padding="12dp"
-            android:scaleType="fitCenter" />
+            app:fabSize="normal"
+            app:backgroundTint="@color/accent_like"
+            app:tint="@color/white"
+            app:elevation="4dp"
+            app:borderWidth="0dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
