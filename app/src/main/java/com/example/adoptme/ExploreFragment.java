@@ -59,6 +59,11 @@ public class ExploreFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationClient;
     private Location userLocation;
 
+    // Store the card's initial centered position
+    private float cardInitialX = 0f;
+    private float cardInitialY = 0f;
+    private boolean cardPositionCaptured = false;
+
     public ExploreFragment() {
         super(R.layout.fragment_explore);
     }
@@ -113,21 +118,23 @@ public class ExploreFragment extends Fragment {
     private void setupSwipeGestures() {
         if (cardContainer == null) return;
 
+        // Capture the card's initial centered position once the view is laid out
+        cardContainer.post(() -> {
+            if (!cardPositionCaptured) {
+                cardInitialX = cardContainer.getX();
+                cardInitialY = cardContainer.getY();
+                cardPositionCaptured = true;
+                android.util.Log.d("ExploreFragment", "Captured card initial position: x=" + cardInitialX + ", y=" + cardInitialY);
+            }
+        });
+
         final float[] dX = {0};
         final float[] dY = {0};
         final float[] startX = {0};
         final float[] startY = {0};
         final boolean[] isDragging = {false};
-        final float[] initialX = {-1};
-        final float[] initialY = {-1};
 
         cardContainer.setOnTouchListener((v, event) -> {
-            // Capture initial position on first touch
-            if (initialX[0] == -1) {
-                initialX[0] = v.getX();
-                initialY[0] = v.getY();
-                android.util.Log.d("ExploreFragment", "Captured initial card position: x=" + initialX[0] + ", y=" + initialY[0]);
-            }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     // Record starting position
@@ -185,10 +192,10 @@ public class ExploreFragment extends Fragment {
                         }
                     } else {
                         // Swipe not completed - animate back to initial position
-                        android.util.Log.d("ExploreFragment", "Resetting card to initial position: x=" + initialX[0] + ", y=" + initialY[0] + " (current: x=" + v.getX() + ", y=" + v.getY() + ")");
+                        android.util.Log.d("ExploreFragment", "Resetting card to initial position: x=" + cardInitialX + ", y=" + cardInitialY + " (current: x=" + v.getX() + ", y=" + v.getY() + ")");
                         v.animate()
-                                .x(initialX[0])
-                                .y(initialY[0])
+                                .x(cardInitialX)
+                                .y(cardInitialY)
                                 .rotation(0)
                                 .scaleX(1.0f)
                                 .scaleY(1.0f)
@@ -435,7 +442,6 @@ public class ExploreFragment extends Fragment {
 
         String info = "";
         if (pet.getAgeCategory() != null) info += pet.getAgeCategory();
-        if (pet.getLocation() != null) info += (info.isEmpty() ? "" : ", ") + pet.getLocationString();
         tvPetInfo.setText(info);
 
         // Show loading spinner with rotation animation
@@ -446,7 +452,7 @@ public class ExploreFragment extends Fragment {
 
             // Set background to app_bg color while loading
             if (cardContent != null) {
-                cardContent.setBackgroundColor(getResources().getColor(R.color.app_bg, null));
+                cardContent.setBackgroundColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.app_bg));
             }
 
             // Hide dark overlay while loading
@@ -575,29 +581,25 @@ public class ExploreFragment extends Fragment {
             return;
         }
 
-        displayCurrentPet();
-
-        // Reset card position and animate entrance
+        // Reset card position FIRST before displaying new pet
         if (cardContainer != null) {
-            // Get the card's initial/centered position
-            cardContainer.post(() -> {
-                float centerX = cardContainer.getX();
-                float centerY = cardContainer.getY();
-                android.util.Log.d("ExploreFragment", "Resetting card to centered position: x=" + centerX + ", y=" + centerY);
+            android.util.Log.d("ExploreFragment", "Resetting card to initial centered position: x=" + cardInitialX + ", y=" + cardInitialY);
 
-                // Reset transformations to centered position
-                cardContainer.setX(centerX);
-                cardContainer.setY(centerY);
-                cardContainer.setRotation(0);
-                cardContainer.setScaleX(1.0f);
-                cardContainer.setScaleY(1.0f);
-                cardContainer.setAlpha(1.0f);
+            // Reset transformations to initial centered position immediately
+            cardContainer.setX(cardInitialX);
+            cardContainer.setY(cardInitialY);
+            cardContainer.setRotation(0);
+            cardContainer.setScaleX(1.0f);
+            cardContainer.setScaleY(1.0f);
+            cardContainer.setAlpha(1.0f);
 
-                // Animate new card entrance
-                android.view.animation.Animation enterAnimation = android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.card_enter);
-                cardContainer.startAnimation(enterAnimation);
-            });
+            // Animate new card entrance
+            android.view.animation.Animation enterAnimation = android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.card_enter);
+            cardContainer.startAnimation(enterAnimation);
         }
+
+        // Display new pet AFTER resetting position
+        displayCurrentPet();
     }
 
     private void showPetDetailsDialog(Pet pet) {
