@@ -118,8 +118,16 @@ public class ExploreFragment extends Fragment {
         final float[] startX = {0};
         final float[] startY = {0};
         final boolean[] isDragging = {false};
+        final float[] initialX = {-1};
+        final float[] initialY = {-1};
 
         cardContainer.setOnTouchListener((v, event) -> {
+            // Capture initial position on first touch
+            if (initialX[0] == -1) {
+                initialX[0] = v.getX();
+                initialY[0] = v.getY();
+                android.util.Log.d("ExploreFragment", "Captured initial card position: x=" + initialX[0] + ", y=" + initialY[0]);
+            }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     // Record starting position
@@ -176,10 +184,11 @@ public class ExploreFragment extends Fragment {
                             handlePass();
                         }
                     } else {
-                        // Swipe not completed - animate back to center
+                        // Swipe not completed - animate back to initial position
+                        android.util.Log.d("ExploreFragment", "Resetting card to initial position: x=" + initialX[0] + ", y=" + initialY[0] + " (current: x=" + v.getX() + ", y=" + v.getY() + ")");
                         v.animate()
-                                .x(0)
-                                .y(0)
+                                .x(initialX[0])
+                                .y(initialY[0])
                                 .rotation(0)
                                 .scaleX(1.0f)
                                 .scaleY(1.0f)
@@ -570,17 +579,24 @@ public class ExploreFragment extends Fragment {
 
         // Reset card position and animate entrance
         if (cardContainer != null) {
-            // Reset transformations
-            cardContainer.setX(0);
-            cardContainer.setY(0);
-            cardContainer.setRotation(0);
-            cardContainer.setScaleX(1.0f);
-            cardContainer.setScaleY(1.0f);
-            cardContainer.setAlpha(1.0f);
+            // Get the card's initial/centered position
+            cardContainer.post(() -> {
+                float centerX = cardContainer.getX();
+                float centerY = cardContainer.getY();
+                android.util.Log.d("ExploreFragment", "Resetting card to centered position: x=" + centerX + ", y=" + centerY);
 
-            // Animate new card entrance
-            android.view.animation.Animation enterAnimation = android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.card_enter);
-            cardContainer.startAnimation(enterAnimation);
+                // Reset transformations to centered position
+                cardContainer.setX(centerX);
+                cardContainer.setY(centerY);
+                cardContainer.setRotation(0);
+                cardContainer.setScaleX(1.0f);
+                cardContainer.setScaleY(1.0f);
+                cardContainer.setAlpha(1.0f);
+
+                // Animate new card entrance
+                android.view.animation.Animation enterAnimation = android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.card_enter);
+                cardContainer.startAnimation(enterAnimation);
+            });
         }
     }
 
