@@ -39,6 +39,9 @@ public class ExploreFragment extends Fragment {
 
     private ImageView ivPetImage;
     private TextView tvPetName, tvPetBreed, tvPetInfo;
+    private ImageView pbPetImageLoading; // Changed from ProgressBar to ImageView
+    private androidx.constraintlayout.widget.ConstraintLayout cardContent;
+    private View darkOverlay;
 
     private ImageButton btnReject, btnInfo, btnLike;
     private FrameLayout cardContainer;
@@ -64,6 +67,8 @@ public class ExploreFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        android.util.Log.d("ExploreFragment", "=== ExploreFragment onViewCreated ===");
+
         // Initialize location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
@@ -74,6 +79,9 @@ public class ExploreFragment extends Fragment {
             tvPetName = cardContainer.findViewById(R.id.tvPetName);
             tvPetBreed = cardContainer.findViewById(R.id.tvPetBreed);
             tvPetInfo = cardContainer.findViewById(R.id.tvPetInfo);
+            pbPetImageLoading = cardContainer.findViewById(R.id.pbPetImageLoading);
+            cardContent = cardContainer.findViewById(R.id.cardContent);
+            darkOverlay = cardContainer.findViewById(R.id.darkOverlay);
         }
 
         // Buttons
@@ -199,6 +207,8 @@ public class ExploreFragment extends Fragment {
 
     private void loadUserPreferencesAndFetchPets() {
         String userId = FirebaseAuth.getInstance().getUid();
+        android.util.Log.d("ExploreFragment", "loadUserPreferencesAndFetchPets - userId: " + userId);
+
         if (userId == null) {
             Toast.makeText(getContext(), "Please log in", Toast.LENGTH_SHORT).show();
             return;
@@ -270,11 +280,39 @@ public class ExploreFragment extends Fragment {
 
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(location -> {
-                    userLocation = location;
+                    if (location == null) {
+                        // Use Tel Aviv as default location if GPS not available
+                        userLocation = new Location("default");
+                        userLocation.setLatitude(32.0853);  // Tel Aviv latitude
+                        userLocation.setLongitude(34.7818); // Tel Aviv longitude
+                        android.util.Log.d("ExploreFragment", "GPS not available, using Tel Aviv");
+                    } else {
+                        // Check if location is in Israel (rough bounding box)
+                        // Israel bounds: lat 29-33.5, lon 34-36
+                        double lat = location.getLatitude();
+                        double lon = location.getLongitude();
+                        boolean isInIsrael = (lat >= 29.0 && lat <= 33.5) && (lon >= 34.0 && lon <= 36.0);
+
+                        if (isInIsrael) {
+                            userLocation = location;
+                            android.util.Log.d("ExploreFragment", "Using GPS location in Israel: " + lat + ", " + lon);
+                        } else {
+                            // Override with Tel Aviv if outside Israel
+                            userLocation = new Location("default");
+                            userLocation.setLatitude(32.0853);  // Tel Aviv latitude
+                            userLocation.setLongitude(34.7818); // Tel Aviv longitude
+                            android.util.Log.d("ExploreFragment", "Location outside Israel (" + lat + ", " + lon + "), using Tel Aviv");
+                        }
+                    }
                     loadUserPreferencesAndFetchPets();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Failed to get location", Toast.LENGTH_SHORT).show();
+                    // Use Tel Aviv as default location on error
+                    userLocation = new Location("default");
+                    userLocation.setLatitude(32.0853);  // Tel Aviv latitude
+                    userLocation.setLongitude(34.7818); // Tel Aviv longitude
+                    android.util.Log.d("ExploreFragment", "Location error, using Tel Aviv");
+                    Toast.makeText(getContext(), "Using default location: Tel Aviv", Toast.LENGTH_SHORT).show();
                     loadUserPreferencesAndFetchPets();
                 });
     }
@@ -300,6 +338,15 @@ public class ExploreFragment extends Fragment {
                 .get()
                 .addOnSuccessListener(query -> {
                     petList.clear();
+                    int totalPets = query.size();
+                    int filteredCount = 0;
+
+                    android.util.Log.d("ExploreFragment", "Total pets in database: " + totalPets);
+                    android.util.Log.d("ExploreFragment", "User location: " + userLocation);
+                    android.util.Log.d("ExploreFragment", "Location radius: " + locationRadius);
+                    android.util.Log.d("ExploreFragment", "Preferred types: " + preferredTypes);
+                    android.util.Log.d("ExploreFragment", "Preferred sizes: " + preferredSizes);
+
                     for (DocumentSnapshot doc : query.getDocuments()) {
                         Pet pet = doc.toObject(Pet.class);
                         if (pet != null) {
@@ -307,16 +354,22 @@ public class ExploreFragment extends Fragment {
 
                             // Filter: skip if already passed or favorited
                             if (userPassedPets.contains(pet.getId()) || userFavoritePets.contains(pet.getId())) {
+                                android.util.Log.d("ExploreFragment", "Filtered (already seen): " + pet.getName());
+                                filteredCount++;
                                 continue;
                             }
 
                             // Filter by type preference
                             if (!preferredTypes.isEmpty() && pet.getType() != null && !preferredTypes.contains(pet.getType())) {
+                                android.util.Log.d("ExploreFragment", "Filtered (type): " + pet.getName() + " - " + pet.getType());
+                                filteredCount++;
                                 continue;
                             }
 
                             // Filter by size preference
                             if (!preferredSizes.isEmpty() && pet.getSize() != null && !preferredSizes.contains(pet.getSize())) {
+                                android.util.Log.d("ExploreFragment", "Filtered (size): " + pet.getName() + " - " + pet.getSize());
+                                filteredCount++;
                                 continue;
                             }
 
@@ -324,19 +377,27 @@ public class ExploreFragment extends Fragment {
                             if (userLocation != null && pet.getLocation() != null) {
                                 double distance = calculateDistance(pet.getLocation());
                                 if (distance > locationRadius) {
+                                    android.util.Log.d("ExploreFragment", "Filtered (distance): " + pet.getName() + " - " + distance + "km");
+                                    filteredCount++;
                                     continue;
                                 }
                             }
 
                             petList.add(pet);
+                            android.util.Log.d("ExploreFragment", "Added pet: " + pet.getName());
                         }
                     }
+
+                    android.util.Log.d("ExploreFragment", "Filtered out: " + filteredCount + " pets");
+                    android.util.Log.d("ExploreFragment", "Final pet list size: " + petList.size());
+
                     currentPetIndex = 0;
                     displayCurrentPet();
                 })
-                .addOnFailureListener(e ->
-                        Toast.makeText(getContext(), "Failed to load pets: " + e.getMessage(), Toast.LENGTH_LONG).show()
-                );
+                .addOnFailureListener(e -> {
+                    android.util.Log.e("ExploreFragment", "Failed to load pets", e);
+                    Toast.makeText(getContext(), "Failed to load pets: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 
     private Pet getCurrentPet() {
@@ -356,6 +417,7 @@ public class ExploreFragment extends Fragment {
             tvPetBreed.setText("");
             tvPetInfo.setText("");
             ivPetImage.setImageResource(android.R.drawable.ic_menu_gallery);
+            if (pbPetImageLoading != null) pbPetImageLoading.setVisibility(View.GONE);
             return;
         }
 
@@ -367,10 +429,84 @@ public class ExploreFragment extends Fragment {
         if (pet.getLocation() != null) info += (info.isEmpty() ? "" : ", ") + pet.getLocationString();
         tvPetInfo.setText(info);
 
+        // Show loading spinner with rotation animation
+        if (pbPetImageLoading != null) {
+            android.util.Log.d("ExploreFragment", "Setting up spinner animation");
+            android.util.Log.d("ExploreFragment", "Spinner view: " + pbPetImageLoading);
+            android.util.Log.d("ExploreFragment", "Spinner visibility before: " + pbPetImageLoading.getVisibility());
+
+            // Set background to app_bg color while loading
+            if (cardContent != null) {
+                cardContent.setBackgroundColor(getResources().getColor(R.color.app_bg, null));
+            }
+
+            // Hide dark overlay while loading
+            if (darkOverlay != null) {
+                darkOverlay.setVisibility(View.GONE);
+            }
+
+            pbPetImageLoading.setVisibility(View.VISIBLE);
+            android.util.Log.d("ExploreFragment", "Spinner visibility after: " + pbPetImageLoading.getVisibility());
+
+            // Create and start rotation animation programmatically
+            android.view.animation.RotateAnimation rotation = new android.view.animation.RotateAnimation(
+                0f, 360f,
+                android.view.animation.Animation.RELATIVE_TO_SELF, 0.5f,
+                android.view.animation.Animation.RELATIVE_TO_SELF, 0.5f
+            );
+            rotation.setDuration(250); // 250ms per rotation = 4 rotations per second (1000ms / 4 = 250ms)
+            rotation.setRepeatCount(android.view.animation.Animation.INFINITE);
+            rotation.setInterpolator(new android.view.animation.LinearInterpolator());
+            rotation.setFillAfter(true);
+
+            android.util.Log.d("ExploreFragment", "Starting animation with duration: " + rotation.getDuration());
+            pbPetImageLoading.startAnimation(rotation);
+            android.util.Log.d("ExploreFragment", "Animation started. Has animation: " + (pbPetImageLoading.getAnimation() != null));
+        } else {
+            android.util.Log.e("ExploreFragment", "pbPetImageLoading is NULL!");
+        }
+
         Glide.with(this)
                 .load(pet.getImageUrl())
                 .centerCrop()
-                .placeholder(android.R.drawable.ic_menu_gallery)
+                .skipMemoryCache(true) // Temporarily disable cache to see spinner
+                .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.NONE)
+                // No placeholder - spinner is already visible behind
+                .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(com.bumptech.glide.load.engine.GlideException e, Object model,
+                                                com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
+                                                boolean isFirstResource) {
+                        // Hide spinner on failure
+                        if (pbPetImageLoading != null) {
+                            android.util.Log.d("ExploreFragment", "Image load FAILED - stopping spinner");
+                            pbPetImageLoading.clearAnimation();
+                            pbPetImageLoading.setVisibility(View.GONE);
+                        }
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(android.graphics.drawable.Drawable resource, Object model,
+                                                   com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
+                                                   com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                        // Hide spinner on success
+                        if (pbPetImageLoading != null) {
+                            android.util.Log.d("ExploreFragment", "Image load SUCCESS - stopping spinner");
+                            pbPetImageLoading.clearAnimation();
+                            pbPetImageLoading.setVisibility(View.GONE);
+                            // Make background transparent now that image is loaded
+                            if (cardContent != null) {
+                                cardContent.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+                            }
+                            // Show dark overlay now that image is visible
+                            if (darkOverlay != null) {
+                                darkOverlay.setVisibility(View.VISIBLE);
+                            }
+                        }
+                        return false;
+                    }
+                })
                 .into(ivPetImage);
     }
 
@@ -410,10 +546,6 @@ public class ExploreFragment extends Fragment {
                 .addOnSuccessListener(aVoid -> {
                     userFavoritePets.add(pet.getId());
                     showContactDialog(pet);
-                    // Delay to let animation finish
-                    if (cardContainer != null) {
-                        cardContainer.postDelayed(this::showNextPet, 300);
-                    }
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(getContext(), "Failed to add to favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show()
@@ -520,6 +652,12 @@ public class ExploreFragment extends Fragment {
     }
 
     private void showContactDialog(Pet pet) {
+        // Check if fragment is still attached to avoid crash
+        if (!isAdded() || getContext() == null) {
+            android.util.Log.w("ExploreFragment", "Fragment not attached, skipping contact dialog");
+            return;
+        }
+
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_contact_shelter);
 
@@ -560,6 +698,13 @@ public class ExploreFragment extends Fragment {
         }
 
         btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        // Move to next pet only when dialog is dismissed
+        dialog.setOnDismissListener(d -> {
+            if (cardContainer != null) {
+                cardContainer.postDelayed(this::showNextPet, 300);
+            }
+        });
 
         dialog.show();
     }

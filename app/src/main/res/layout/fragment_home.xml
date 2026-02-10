@@ -24,12 +24,13 @@
 
     <ImageView
         android:id="@+id/ivLogo"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         app:layout_constraintTop_toTopOf="@id/gTop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/pawblack" />
+        app:srcCompat="@drawable/logo"
+        android:contentDescription="App Logo" />
 
     <TextView
         android:id="@+id/tvAppName"
