@@ -429,11 +429,15 @@ public class ExploreFragment extends Fragment {
     private void displayCurrentPet() {
         Pet pet = getCurrentPet();
         if (pet == null) {
-            tvPetName.setText("No pets available");
+            tvPetName.setText("");
             tvPetBreed.setText("");
             tvPetInfo.setText("");
-            ivPetImage.setImageResource(android.R.drawable.ic_menu_gallery);
+            // Use fitCenter to show the whole "no pets" image without cropping
+            ivPetImage.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
+            ivPetImage.setImageResource(R.drawable.no_pets);
             if (pbPetImageLoading != null) pbPetImageLoading.setVisibility(View.GONE);
+            // Hide dark overlay when showing no pets image
+            if (darkOverlay != null) darkOverlay.setVisibility(View.GONE);
             return;
         }
 
@@ -443,6 +447,9 @@ public class ExploreFragment extends Fragment {
         String info = "";
         if (pet.getAgeCategory() != null) info += pet.getAgeCategory();
         tvPetInfo.setText(info);
+
+        // Reset scaleType to centerCrop for pet images
+        ivPetImage.setScaleType(android.widget.ImageView.ScaleType.CENTER_CROP);
 
         // Show loading spinner with rotation animation
         if (pbPetImageLoading != null) {
