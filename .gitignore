@@ -13,3 +13,17 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+
+
+# Firebase
+app/google-services.json
+**/google-services.json
+
+
+# Keystore
+*.jks
+*.keystore
+
+# Mac
+.DS_Store
