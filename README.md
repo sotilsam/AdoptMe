@@ -41,6 +41,7 @@ AdoptMe/
 └── build.gradle.kts                       # Build configuration
 
 ---
+
 ## 🔧 Technical Implementations
 
 * **Custom Gesture Detection**: Smooth card swiping with rotation and scale effects using `MotionEvent`.
