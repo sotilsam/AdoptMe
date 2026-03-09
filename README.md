@@ -50,12 +50,16 @@ AdoptMe/
 * **Dynamic Loading**: Custom rotating `RotateAnimation` for image loading feedback.
 * **Dialog Interaction**: Custom dialogs for shelter contact info that control the swiping flow.
 
+---
+
 ## ⚙️ How to Run
 
 1. **Clone the repo**: `git clone [your-repo-link]`
 2. **Setup Firebase**: Create a project in Firebase Console, enable Auth/Firestore, and add your `google-services.json` to the `app/` folder.
 3. **Build**: Open in **Android Studio** and sync Gradle.
 4. **Emulator Settings**: If you encounter a black screen, edit your AVD and change Graphics to "Software - GLES 2.0".
+
+---
 
 ## 💡 Future Enhancements
 
@@ -64,6 +68,8 @@ AdoptMe/
 - [ ] Push notifications for new pets.
 - [ ] Map-based view of nearby pets.
 - [ ] Admin panel for shelter management.
+
+---
 
 ## 🛠️ Troubleshooting Guide
 
