@@ -27,8 +27,6 @@
 ---
 
 ## 🏗️ Project Structure
-
-```
 AdoptMe/
 ├── app/
 │   ├── src/main/java/com/example/adoptme/
@@ -39,7 +37,6 @@ AdoptMe/
 │   │   └── Adapters/                      # RecyclerView logic
 │   └── res/                               # Layouts, Navigation, Animations
 └── build.gradle.kts                       # Build configuration
-
 ---
 
 ## 🔧 Technical Implementations
