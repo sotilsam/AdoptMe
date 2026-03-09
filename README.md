@@ -28,7 +28,7 @@
 
 ## 🏗️ Project Structure
 
-```text
+```
 AdoptMe/
 ├── app/
 │   ├── src/main/java/com/example/adoptme/
